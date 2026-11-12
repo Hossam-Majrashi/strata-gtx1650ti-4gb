@@ -28,7 +28,8 @@ unchanged. Numbers are the reporters' own, on one machine each, unless the text 
 | RTX 20 (Turing) | 7.5 | **supported**, the ready-made engine | opt-in `STRATA_BF16_TC=1` runs the BF16 projections on the FP16 tensor cores |
 
 A card needs enough VRAM to be useful. 12 GB or more is recommended, as for every card. A 2 GB GT 1030 is compute capability 6.1
-too and cannot hold any of the model.
+too and cannot hold any of the model. For a 4 GB GTX 1650 Ti with an already prepared Flash-Next IQ3_XXS pack,
+see the [experimental mapped-weight source build](GTX1650.md). It uses pinned RAM for canonical weights; it is not a released-engine compatibility claim.
 
 ### AMD
 

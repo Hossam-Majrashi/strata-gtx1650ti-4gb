@@ -1,3 +1,26 @@
+# Strata on GTX 1650 Ti — 4 GB VRAM
+
+**Experimental, unofficial fork of [Niko1221/Strata](https://github.com/Niko1221/Strata).**
+It adds opt-in mapped host storage for canonical weights, plus a small-VRAM launcher.
+Tested on one GTX 1650 Ti 4 GB laptop with 64 GB RAM and Linux, using an already prepared
+ISTA-DASLab Qwen3.8-Flash-Next IQ3_XXS pack.
+
+**[Build, run, test results and limits → docs/GTX1650.md](docs/GTX1650.md)**
+
+- Real local chat requests passed in English and Arabic, including `hi`.
+- The launcher uses 8K context, but a full 8K prompt and long-running sessions have **not** been tested.
+- Pictures and drafting are off. Reading weights over PCIe is slower; this is not a speed-optimized build.
+- No model weights or patched binaries are included. Build this fork from source; the upstream
+  installers linked below do **not** contain this patch. Existing app settings are not replaced.
+- Other cards, Windows, HIP, SYCL and Metal have not been validated for this change.
+
+**بالعربية:** نسخة تجريبية لكرت GTX 1650 Ti بذاكرة 4GB. نجح التشغيل على Linux مع رام 64GB.
+تحتاج بناء المحرك من المصدر وملفات الموديل المجهّزة مسبقًا؛ راجع الدليل أعلاه.
+
+---
+
+The original upstream README follows. Its general compatibility claims are not validation of this fork.
+
 <p align="center">
   <picture>
     <source media="(prefers-color-scheme: dark)" srcset="apps/host/public/brand/strata-lockup-dark.svg">

@@ -77,6 +77,9 @@
 #include "strata/kernels/kv_q4.hpp"
 #include "strata/kernels/qsa.hpp"
 #include "strata/core/native_head.hpp"
+#if !defined(STRATA_USE_HIP) && !defined(STRATA_HIP_GFX906) && !defined(STRATA_GPU_METAL)
+#include "strata/core/mapped_weight_arena.hpp"
+#endif
 #include "strata/core/spill_gate.hpp"
 #include "strata/core/pcie_share_rule.hpp"
 #include "strata/core/verify.hpp"
@@ -5219,7 +5222,28 @@ int main(int argc, char** argv) {
         return 1;
     }
     void* arena = nullptr;
-    if (const cudaError_t ce = cudaMalloc(&arena, pool_bytes); ce != cudaSuccess) {
+    bool weight_arena_host = false;
+#if !defined(STRATA_USE_HIP) && !defined(STRATA_HIP_GFX906) && !defined(STRATA_GPU_METAL)
+    strata::core::MappedWeightArena host_weight_arena;
+    const char* host_weights = std::getenv("STRATA_WEIGHT_ARENA_HOST");
+    weight_arena_host = host_weights != nullptr && std::strcmp(host_weights, "1") == 0;
+    if (weight_arena_host) {
+        if (multi_gpu || !spill_discrete_gpu()) {
+            std::fprintf(stderr, "strata generate: STRATA_WEIGHT_ARENA_HOST=1 needs one discrete CUDA GPU\n");
+            return 1;
+        }
+        const cudaError_t ce = host_weight_arena.allocate(&arena, pool_bytes);
+        if (ce != cudaSuccess) {
+            std::fprintf(stderr, "strata generate: mapped host weight arena (%llu MiB) failed: %s\n",
+                         (unsigned long long) (pool_bytes >> 20), cudaGetErrorString(ce));
+            return 1;
+        }
+        std::fprintf(stderr, "strata generate: STRATA_WEIGHT_ARENA_HOST=1: %llu MiB of canonical weights in pinned RAM; "
+                             "the GPU reads the same bytes over PCIe (experimental, slower decode)\n",
+                     (unsigned long long) (pool_bytes >> 20));
+    }
+#endif
+    if (const cudaError_t ce = weight_arena_host ? cudaSuccess : cudaMalloc(&arena, pool_bytes); ce != cudaSuccess) {
         // #486: the arena is the first large allocation and its size does not depend on the context, so what is
         // missing is held by something else: say how much was free
         cudaGetLastError();
@@ -6788,8 +6812,15 @@ int main(int argc, char** argv) {
             strata::core::qsa_set_kv_elastic(on, iv != nullptr && std::atoll(iv) > 0 ? std::atoll(iv) : 16384);
             strata::core::ExpertCache::set_vmm(on);
         }
-        if (cudaMalloc(&sbuf, strata::core::session_bytes(g, o.max_context, K, 0, hi0)) != cudaSuccess) {
-            std::fprintf(stderr, "strata generate: session state allocation failed\n");
+        const uint64_t state_bytes = strata::core::session_bytes(g, o.max_context, K, 0, hi0);
+        if (const cudaError_t ce = cudaMalloc(&sbuf, state_bytes); ce != cudaSuccess) {
+            size_t free_b = 0, total_b = 0;
+            cudaGetLastError();
+            cudaMemGetInfo(&free_b, &total_b);
+            std::fprintf(stderr, "strata generate: session state allocation failed: %llu MiB requested, %llu MiB of "
+                                 "%llu MiB VRAM free (%s). Try a smaller --max-context or --kv-resident window.\n",
+                         (unsigned long long) ((state_bytes + (1ull << 20) - 1) >> 20),
+                         (unsigned long long) (free_b >> 20), (unsigned long long) (total_b >> 20), cudaGetErrorString(ce));
             return 1;
         }
         if (strata::core::session_init(g, o.max_context, K, sbuf, ss, 0, hi0) == 0) {
@@ -21557,7 +21588,7 @@ int main(int argc, char** argv) {
     cudaFree(d_emb);
     cudaFree(d_parts);
     cudaFree(sbuf);
-    cudaFree(arena);
+    if (!weight_arena_host) cudaFree(arena);   // mapped host weights are owned by host_weight_arena
     return 0;
 }
 

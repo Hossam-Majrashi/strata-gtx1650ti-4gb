@@ -594,6 +594,13 @@ endif()
 
 strata_cpu_tests()
 
+if(STRATA_ENABLE_CUDA AND STRATA_BUILD_TESTS AND NOT STRATA_HIP_GFX906)
+  add_executable(mapped_weight_arena_test tests/cuda/mapped_weight_arena_test.cu)
+  target_link_libraries(mapped_weight_arena_test PRIVATE strata_core CUDA::cudart)
+  add_test(NAME mapped_weight_arena_test COMMAND mapped_weight_arena_test)
+  set_tests_properties(mapped_weight_arena_test PROPERTIES SKIP_RETURN_CODE 77 TIMEOUT 60)
+endif()
+
 # CUDA release kernels must not spill or keep a per-thread array in local memory: every access there is a round trip
 # to device memory in the hottest loops the engine has, and nothing on the build machine says so without -Xptxas -v
 # or a GPU.  tools/check_cuda_spills.py reads the resource usage the compiler wrote into the kernel libraries
