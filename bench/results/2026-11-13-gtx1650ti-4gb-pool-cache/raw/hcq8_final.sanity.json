@@ -1,0 +1,723 @@
+{
+  "label": "hcq8_final",
+  "health": {
+    "status": "ok",
+    "max_context": 8192,
+    "model": "qwen3.8-flash-next-iq3_xxs-gtx1650-hc-q8",
+    "images": false,
+    "api_key": false,
+    "image_generation": false,
+    "loaded": true,
+    "service": "strata"
+  },
+  "checks": [
+    {
+      "case": "arithmetic",
+      "request": {
+        "model": "qwen3.8-flash-next-iq3_xxs-gtx1650-hc-q8",
+        "temperature": 0,
+        "max_tokens": 64,
+        "chat_template_kwargs": {
+          "enable_thinking": false
+        },
+        "messages": [
+          {
+            "role": "user",
+            "content": "What is 17 + 25? Reply with the number only."
+          }
+        ]
+      },
+      "expected": "42",
+      "passed": true,
+      "wall_s": 2.18,
+      "response": {
+        "id": "chatcmpl-a894f268ee9e4eb0a70d317c",
+        "object": "chat.completion",
+        "created": 1794533833,
+        "model": "qwen3.8-flash-next-iq3_xxs-gtx1650-hc-q8",
+        "choices": [
+          {
+            "index": 0,
+            "message": {
+              "role": "assistant",
+              "content": "42"
+            },
+            "finish_reason": "stop"
+          }
+        ],
+        "usage": {
+          "prompt_tokens": 28,
+          "completion_tokens": 3,
+          "total_tokens": 31,
+          "prompt_tokens_details": {
+            "cached_tokens": 0
+          }
+        },
+        "timings": {
+          "cache_n": 0,
+          "prompt_n": 28,
+          "prompt_ms": 1834.0,
+          "prompt_per_token_ms": 65.5,
+          "prompt_per_second": 15.3,
+          "predicted_n": 3,
+          "predicted_ms": 343.0,
+          "predicted_per_token_ms": 114.333,
+          "predicted_per_second": 8.7,
+          "draft_n": 0,
+          "draft_n_accepted": 0
+        }
+      }
+    },
+    {
+      "case": "multiplication",
+      "request": {
+        "model": "qwen3.8-flash-next-iq3_xxs-gtx1650-hc-q8",
+        "temperature": 0,
+        "max_tokens": 64,
+        "chat_template_kwargs": {
+          "enable_thinking": false
+        },
+        "messages": [
+          {
+            "role": "user",
+            "content": "What is 13 times 7? Reply with the number only."
+          }
+        ]
+      },
+      "expected": "91",
+      "passed": true,
+      "wall_s": 1.998,
+      "response": {
+        "id": "chatcmpl-8d418258e60543a5bed12762",
+        "object": "chat.completion",
+        "created": 1794533835,
+        "model": "qwen3.8-flash-next-iq3_xxs-gtx1650-hc-q8",
+        "choices": [
+          {
+            "index": 0,
+            "message": {
+              "role": "assistant",
+              "content": "91"
+            },
+            "finish_reason": "stop"
+          }
+        ],
+        "usage": {
+          "prompt_tokens": 27,
+          "completion_tokens": 3,
+          "total_tokens": 30,
+          "prompt_tokens_details": {
+            "cached_tokens": 0
+          }
+        },
+        "timings": {
+          "cache_n": 0,
+          "prompt_n": 27,
+          "prompt_ms": 1652.5,
+          "prompt_per_token_ms": 61.204,
+          "prompt_per_second": 16.3,
+          "predicted_n": 3,
+          "predicted_ms": 343.4,
+          "predicted_per_token_ms": 114.467,
+          "predicted_per_second": 8.7,
+          "draft_n": 0,
+          "draft_n_accepted": 0
+        }
+      }
+    },
+    {
+      "case": "arabic",
+      "request": {
+        "model": "qwen3.8-flash-next-iq3_xxs-gtx1650-hc-q8",
+        "temperature": 0,
+        "max_tokens": 64,
+        "chat_template_kwargs": {
+          "enable_thinking": false
+        },
+        "messages": [
+          {
+            "role": "user",
+            "content": "ما عاصمة السعودية؟ أجب بالعربية بجملة قصيرة."
+          }
+        ]
+      },
+      "expected": "الرياض",
+      "passed": true,
+      "wall_s": 2.642,
+      "response": {
+        "id": "chatcmpl-f6d954f326124d27bb2c6ca9",
+        "object": "chat.completion",
+        "created": 1794533837,
+        "model": "qwen3.8-flash-next-iq3_xxs-gtx1650-hc-q8",
+        "choices": [
+          {
+            "index": 0,
+            "message": {
+              "role": "assistant",
+              "content": "عاصمة المملكة العربية السعودية هي الرياض."
+            },
+            "finish_reason": "stop"
+          }
+        ],
+        "usage": {
+          "prompt_tokens": 26,
+          "completion_tokens": 9,
+          "total_tokens": 35,
+          "prompt_tokens_details": {
+            "cached_tokens": 0
+          }
+        },
+        "timings": {
+          "cache_n": 0,
+          "prompt_n": 26,
+          "prompt_ms": 1619.2,
+          "prompt_per_token_ms": 62.277,
+          "prompt_per_second": 16.1,
+          "predicted_n": 9,
+          "predicted_ms": 1021.0,
+          "predicted_per_token_ms": 113.444,
+          "predicted_per_second": 8.8,
+          "draft_n": 0,
+          "draft_n_accepted": 0
+        }
+      }
+    },
+    {
+      "case": "capital",
+      "request": {
+        "model": "qwen3.8-flash-next-iq3_xxs-gtx1650-hc-q8",
+        "temperature": 0,
+        "max_tokens": 64,
+        "chat_template_kwargs": {
+          "enable_thinking": false
+        },
+        "messages": [
+          {
+            "role": "user",
+            "content": "What is the capital of France? Reply with the city only."
+          }
+        ]
+      },
+      "expected": "Paris",
+      "passed": true,
+      "wall_s": 1.864,
+      "response": {
+        "id": "chatcmpl-c93ee71dfaa7487a817fe248",
+        "object": "chat.completion",
+        "created": 1794533840,
+        "model": "qwen3.8-flash-next-iq3_xxs-gtx1650-hc-q8",
+        "choices": [
+          {
+            "index": 0,
+            "message": {
+              "role": "assistant",
+              "content": "Paris"
+            },
+            "finish_reason": "stop"
+          }
+        ],
+        "usage": {
+          "prompt_tokens": 25,
+          "completion_tokens": 2,
+          "total_tokens": 27,
+          "prompt_tokens_details": {
+            "cached_tokens": 0
+          }
+        },
+        "timings": {
+          "cache_n": 0,
+          "prompt_n": 25,
+          "prompt_ms": 1634.6,
+          "prompt_per_token_ms": 65.384,
+          "prompt_per_second": 15.3,
+          "predicted_n": 2,
+          "predicted_ms": 227.8,
+          "predicted_per_token_ms": 113.9,
+          "predicted_per_second": 8.8,
+          "draft_n": 0,
+          "draft_n_accepted": 0
+        }
+      }
+    },
+    {
+      "case": "json",
+      "request": {
+        "model": "qwen3.8-flash-next-iq3_xxs-gtx1650-hc-q8",
+        "temperature": 0,
+        "max_tokens": 64,
+        "chat_template_kwargs": {
+          "enable_thinking": false
+        },
+        "messages": [
+          {
+            "role": "user",
+            "content": "Return only a JSON object with keys name and count. Set name to apple and count to 3. No markdown."
+          }
+        ]
+      },
+      "expected": {
+        "name": "apple",
+        "count": 3
+      },
+      "passed": true,
+      "wall_s": 3.241,
+      "response": {
+        "id": "chatcmpl-20d8e86cbc2f42c9aa449f30",
+        "object": "chat.completion",
+        "created": 1794533842,
+        "model": "qwen3.8-flash-next-iq3_xxs-gtx1650-hc-q8",
+        "choices": [
+          {
+            "index": 0,
+            "message": {
+              "role": "assistant",
+              "content": "{\"name\": \"apple\", \"count\": 3}"
+            },
+            "finish_reason": "stop"
+          }
+        ],
+        "usage": {
+          "prompt_tokens": 36,
+          "completion_tokens": 13,
+          "total_tokens": 49,
+          "prompt_tokens_details": {
+            "cached_tokens": 0
+          }
+        },
+        "timings": {
+          "cache_n": 0,
+          "prompt_n": 36,
+          "prompt_ms": 1754.6,
+          "prompt_per_token_ms": 48.739,
+          "prompt_per_second": 20.5,
+          "predicted_n": 13,
+          "predicted_ms": 1484.2,
+          "predicted_per_token_ms": 114.169,
+          "predicted_per_second": 8.8,
+          "draft_n": 0,
+          "draft_n_accepted": 0
+        }
+      }
+    },
+    {
+      "case": "sort",
+      "request": {
+        "model": "qwen3.8-flash-next-iq3_xxs-gtx1650-hc-q8",
+        "temperature": 0,
+        "max_tokens": 64,
+        "chat_template_kwargs": {
+          "enable_thinking": false
+        },
+        "messages": [
+          {
+            "role": "user",
+            "content": "Sort [3, 1, 2] in ascending order. Reply with only the JSON array."
+          }
+        ]
+      },
+      "expected": [
+        1,
+        2,
+        3
+      ],
+      "passed": true,
+      "wall_s": 2.848,
+      "response": {
+        "id": "chatcmpl-cd942fe586554e559699461a",
+        "object": "chat.completion",
+        "created": 1794533845,
+        "model": "qwen3.8-flash-next-iq3_xxs-gtx1650-hc-q8",
+        "choices": [
+          {
+            "index": 0,
+            "message": {
+              "role": "assistant",
+              "content": "[1, 2, 3]"
+            },
+            "finish_reason": "stop"
+          }
+        ],
+        "usage": {
+          "prompt_tokens": 33,
+          "completion_tokens": 10,
+          "total_tokens": 43,
+          "prompt_tokens_details": {
+            "cached_tokens": 0
+          }
+        },
+        "timings": {
+          "cache_n": 0,
+          "prompt_n": 33,
+          "prompt_ms": 1706.8,
+          "prompt_per_token_ms": 51.721,
+          "prompt_per_second": 19.3,
+          "predicted_n": 10,
+          "predicted_ms": 1139.1,
+          "predicted_per_token_ms": 113.91,
+          "predicted_per_second": 8.8,
+          "draft_n": 0,
+          "draft_n_accepted": 0
+        }
+      }
+    },
+    {
+      "case": "python_square",
+      "request": {
+        "model": "qwen3.8-flash-next-iq3_xxs-gtx1650-hc-q8",
+        "temperature": 0,
+        "max_tokens": 64,
+        "chat_template_kwargs": {
+          "enable_thinking": false
+        },
+        "messages": [
+          {
+            "role": "user",
+            "content": "Write only Python code, no markdown. Define square(n) that returns n multiplied by itself."
+          }
+        ]
+      },
+      "expected": {
+        "square(-3)": 9,
+        "square(0)": 0,
+        "square(2)": 4,
+        "square(7)": 49
+      },
+      "passed": true,
+      "wall_s": 2.941,
+      "response": {
+        "id": "chatcmpl-76fa2ed2ce024867844b0dcc",
+        "object": "chat.completion",
+        "created": 1794533848,
+        "model": "qwen3.8-flash-next-iq3_xxs-gtx1650-hc-q8",
+        "choices": [
+          {
+            "index": 0,
+            "message": {
+              "role": "assistant",
+              "content": "def square(n):\n    return n * n"
+            },
+            "finish_reason": "stop"
+          }
+        ],
+        "usage": {
+          "prompt_tokens": 31,
+          "completion_tokens": 11,
+          "total_tokens": 42,
+          "prompt_tokens_details": {
+            "cached_tokens": 0
+          }
+        },
+        "timings": {
+          "cache_n": 0,
+          "prompt_n": 31,
+          "prompt_ms": 1688.3,
+          "prompt_per_token_ms": 54.461,
+          "prompt_per_second": 18.4,
+          "predicted_n": 11,
+          "predicted_ms": 1250.3,
+          "predicted_per_token_ms": 113.664,
+          "predicted_per_second": 8.8,
+          "draft_n": 0,
+          "draft_n_accepted": 0
+        }
+      }
+    },
+    {
+      "case": "hi",
+      "request": {
+        "model": "qwen3.8-flash-next-iq3_xxs-gtx1650-hc-q8",
+        "temperature": 0,
+        "max_tokens": 64,
+        "chat_template_kwargs": {
+          "enable_thinking": false
+        },
+        "messages": [
+          {
+            "role": "user",
+            "content": "hi"
+          }
+        ]
+      },
+      "expected": "greeting",
+      "passed": true,
+      "wall_s": 2.678,
+      "response": {
+        "id": "chatcmpl-64c77f1923ee4deea6f50af0",
+        "object": "chat.completion",
+        "created": 1794533851,
+        "model": "qwen3.8-flash-next-iq3_xxs-gtx1650-hc-q8",
+        "choices": [
+          {
+            "index": 0,
+            "message": {
+              "role": "assistant",
+              "content": "Hi there! How can I help you today?"
+            },
+            "finish_reason": "stop"
+          }
+        ],
+        "usage": {
+          "prompt_tokens": 13,
+          "completion_tokens": 11,
+          "total_tokens": 24,
+          "prompt_tokens_details": {
+            "cached_tokens": 0
+          }
+        },
+        "timings": {
+          "cache_n": 0,
+          "prompt_n": 13,
+          "prompt_ms": 1423.0,
+          "prompt_per_token_ms": 109.462,
+          "prompt_per_second": 9.1,
+          "predicted_n": 11,
+          "predicted_ms": 1253.6,
+          "predicted_per_token_ms": 113.964,
+          "predicted_per_second": 8.8,
+          "draft_n": 0,
+          "draft_n_accepted": 0
+        }
+      }
+    },
+    {
+      "case": "tool_call",
+      "request": {
+        "model": "qwen3.8-flash-next-iq3_xxs-gtx1650-hc-q8",
+        "temperature": 0,
+        "max_tokens": 96,
+        "chat_template_kwargs": {
+          "enable_thinking": false
+        },
+        "messages": [
+          {
+            "role": "user",
+            "content": "Use get_weather to check the weather in Riyadh, Saudi Arabia."
+          }
+        ],
+        "tools": [
+          {
+            "type": "function",
+            "function": {
+              "name": "get_weather",
+              "description": "Get current weather for a city.",
+              "parameters": {
+                "type": "object",
+                "properties": {
+                  "city": {
+                    "type": "string"
+                  }
+                },
+                "required": [
+                  "city"
+                ]
+              }
+            }
+          }
+        ]
+      },
+      "expected": "get_weather for Riyadh",
+      "passed": true,
+      "wall_s": 12.75,
+      "response": {
+        "id": "chatcmpl-85b222e6f51540c08b265856",
+        "object": "chat.completion",
+        "created": 1794533853,
+        "model": "qwen3.8-flash-next-iq3_xxs-gtx1650-hc-q8",
+        "choices": [
+          {
+            "index": 0,
+            "message": {
+              "role": "assistant",
+              "content": null,
+              "tool_calls": [
+                {
+                  "id": "call_e36890859a1349cda96f895e",
+                  "type": "function",
+                  "function": {
+                    "name": "get_weather",
+                    "arguments": "{\"city\":\"Riyadh, Saudi Arabia\"}"
+                  }
+                }
+              ]
+            },
+            "finish_reason": "tool_calls"
+          }
+        ],
+        "usage": {
+          "prompt_tokens": 274,
+          "completion_tokens": 31,
+          "total_tokens": 305,
+          "prompt_tokens_details": {
+            "cached_tokens": 0
+          }
+        },
+        "timings": {
+          "cache_n": 0,
+          "prompt_n": 274,
+          "prompt_ms": 9180.3,
+          "prompt_per_token_ms": 33.505,
+          "prompt_per_second": 29.8,
+          "predicted_n": 31,
+          "predicted_ms": 3566.2,
+          "predicted_per_token_ms": 115.039,
+          "predicted_per_second": 8.7,
+          "draft_n": 0,
+          "draft_n_accepted": 0
+        }
+      }
+    },
+    {
+      "case": "tool_result",
+      "request": {
+        "model": "qwen3.8-flash-next-iq3_xxs-gtx1650-hc-q8",
+        "temperature": 0,
+        "max_tokens": 64,
+        "chat_template_kwargs": {
+          "enable_thinking": false
+        },
+        "messages": [
+          {
+            "role": "user",
+            "content": "Use get_weather to check the weather in Riyadh, Saudi Arabia."
+          },
+          {
+            "role": "assistant",
+            "content": null,
+            "tool_calls": [
+              {
+                "id": "call_e36890859a1349cda96f895e",
+                "type": "function",
+                "function": {
+                  "name": "get_weather",
+                  "arguments": "{\"city\":\"Riyadh, Saudi Arabia\"}"
+                }
+              }
+            ]
+          },
+          {
+            "role": "tool",
+            "tool_call_id": "call_e36890859a1349cda96f895e",
+            "content": "{\"city\":\"Riyadh\",\"temperature_c\":35,\"condition\":\"sunny\"}"
+          }
+        ],
+        "tools": [
+          {
+            "type": "function",
+            "function": {
+              "name": "get_weather",
+              "description": "Get current weather for a city.",
+              "parameters": {
+                "type": "object",
+                "properties": {
+                  "city": {
+                    "type": "string"
+                  }
+                },
+                "required": [
+                  "city"
+                ]
+              }
+            }
+          }
+        ]
+      },
+      "expected": "35 degrees C",
+      "passed": true,
+      "wall_s": 14.052,
+      "response": {
+        "id": "chatcmpl-5550b4ea967f4f77bd2ccc51",
+        "object": "chat.completion",
+        "created": 1794533866,
+        "model": "qwen3.8-flash-next-iq3_xxs-gtx1650-hc-q8",
+        "choices": [
+          {
+            "index": 0,
+            "message": {
+              "role": "assistant",
+              "content": "The current weather in Riyadh, Saudi Arabia is:\n\n- **Temperature:** 35°C\n- **Condition:** Sunny"
+            },
+            "finish_reason": "stop"
+          }
+        ],
+        "usage": {
+          "prompt_tokens": 340,
+          "completion_tokens": 26,
+          "total_tokens": 366,
+          "prompt_tokens_details": {
+            "cached_tokens": 0
+          }
+        },
+        "timings": {
+          "cache_n": 0,
+          "prompt_n": 340,
+          "prompt_ms": 11091.9,
+          "prompt_per_token_ms": 32.623,
+          "prompt_per_second": 30.7,
+          "predicted_n": 26,
+          "predicted_ms": 2958.0,
+          "predicted_per_token_ms": 113.769,
+          "predicted_per_second": 8.8,
+          "draft_n": 0,
+          "draft_n_accepted": 0
+        }
+      }
+    },
+    {
+      "case": "near_8k_recall",
+      "request": {
+        "model": "qwen3.8-flash-next-iq3_xxs-gtx1650-hc-q8",
+        "temperature": 0,
+        "max_tokens": 16,
+        "chat_template_kwargs": {
+          "enable_thinking": false
+        },
+        "messages": [
+          {
+            "role": "user",
+            "content": "Remember this exact access code: violet-742.\nThe small laptop runs a local language model. The small laptop runs a local language model. The small laptop runs a local language model. The small laptop runs a local language model. The small laptop runs a local language model. The small laptop runs a local language model. The small laptop runs a local language model. The small laptop runs a local language model. The small laptop runs a local language model. The small laptop runs a local language model. The small laptop runs a local language model. The small laptop runs a local language model. The small laptop runs a local language model. The small laptop runs a local language model. The small laptop runs a local language model. The small laptop runs a local language model. The small laptop runs a local language model. The small laptop runs a local language model. The small laptop runs a local language model. The small laptop runs a local language model. The small laptop runs a local language model. The small laptop runs a local language model. The small laptop runs a local language model. The small laptop runs a local language model. The small laptop runs a local language model. The small laptop runs a local language model. The small laptop runs a local language model. The small laptop runs a local language model. The small laptop runs a local language model. The small laptop runs a local language model. The small laptop runs a local language model. The small laptop runs a local language model. The small laptop runs a local language model. The small laptop runs a local language model. The small laptop runs a local language model. The small laptop runs a local language model. The small laptop runs a local language model. The small laptop runs a local language model. The small laptop runs a local language model. The small laptop runs a local language model. The small laptop runs a local language model. The small laptop runs a local language model. The small laptop runs a local language model. The small laptop runs a local language model. The small laptop runs a local language model. The small laptop runs a local language model. The small laptop runs a local language model. The small laptop runs a local language model. The small laptop runs a local language model. The small laptop runs a local language model. The small laptop runs a local language model. The small laptop runs a local language model. The small laptop runs a local language model. The small laptop runs a local language model. The small laptop runs a local language model. The small laptop runs a local language model. The small laptop runs a local language model. The small laptop runs a local language model. The small laptop runs a local language model. The small laptop runs a local language model. The small laptop runs a local language model. The small laptop runs a local language model. The small laptop runs a local language model. The small laptop runs a local language model. The small laptop runs a local language model. The small laptop runs a local language model. The small laptop runs a local language model. The small laptop runs a local language model. The small laptop runs a local language model. The small laptop runs a local language model. The small laptop runs a local language model. The small laptop runs a local language model. The small laptop runs a local language model. The small laptop runs a local language model. The small laptop runs a local language model. The small laptop runs a local language model. The small laptop runs a local language model. The small laptop runs a local language model. The small laptop runs a local language model. The small laptop runs a local language model. The small laptop runs a local language model. The small laptop runs a local language model. The small laptop runs a local language model. The small laptop runs a local language model. The small laptop runs a local language model. The small laptop runs a local language model. The small laptop runs a local language model. The small laptop runs a local language model. The small laptop runs a local language model. The small laptop runs a local language model. The small laptop runs a local language model. The small laptop runs a local language model. The small laptop runs a local language model. The small laptop runs a local language model. The small laptop runs a local language model. The small laptop runs a local language model. The small laptop runs a local language model. The small laptop runs a local language model. The small laptop runs a local language model. The small laptop runs a local language model. The small laptop runs a local language model. The small laptop runs a local language model. The small laptop runs a local language model. The small laptop runs a local language model. The small laptop runs a local language model. The small laptop runs a local language model. The small laptop runs a local language model. The small laptop runs a local language model. The small laptop runs a local language model. The small laptop runs a local language model. The small laptop runs a local language model. The small laptop runs a local language model. The small laptop runs a local language model. The small laptop runs a local language model. The small laptop runs a local language model. The small laptop runs a local language model. The small laptop runs a local language model. The small laptop runs a local language model. The small laptop runs a local language model. The small laptop runs a local language model. The small laptop runs a local language model. The small laptop runs a local language model. The small laptop runs a local language model. The small laptop runs a local language model. The small laptop runs a local language model. The small laptop runs a local language model. The small laptop runs a local language model. The small laptop runs a local language model. The small laptop runs a local language model. The small laptop runs a local language model. The small laptop runs a local language model. The small laptop runs a local language model. The small laptop runs a local language model. The small laptop runs a local language model. The small laptop runs a local language model. The small laptop runs a local language model. The small laptop runs a local language model. The small laptop runs a local language model. The small laptop runs a local language model. The small laptop runs a local language model. The small laptop runs a local language model. The small laptop runs a local language model. The small laptop runs a local language model. The small laptop runs a local language model. The small laptop runs a local language model. The small laptop runs a local language model. The small laptop runs a local language model. The small laptop runs a local language model. The small laptop runs a local language model. The small laptop runs a local language model. The small laptop runs a local language model. The small laptop runs a local language model. The small laptop runs a local language model. The small laptop runs a local language model. The small laptop runs a local language model. The small laptop runs a local language model. The small laptop runs a local language model. The small laptop runs a local language model. The small laptop runs a local language model. The small laptop runs a local language model. The small laptop runs a local language model. The small laptop runs a local language model. The small laptop runs a local language model. The small laptop runs a local language model. The small laptop runs a local language model. The small laptop runs a local language model. The small laptop runs a local language model. The small laptop runs a local language model. The small laptop runs a local language model. The small laptop runs a local language model. The small laptop runs a local language model. The small laptop runs a local language model. The small laptop runs a local language model. The small laptop runs a local language model. The small laptop runs a local language model. The small laptop runs a local language model. The small laptop runs a local language model. The small laptop runs a local language model. The small laptop runs a local language model. The small laptop runs a local language model. The small laptop runs a local language model. The small laptop runs a local language model. The small laptop runs a local language model. The small laptop runs a local language model. The small laptop runs a local language model. The small laptop runs a local language model. The small laptop runs a local language model. The small laptop runs a local language model. The small laptop runs a local language model. The small laptop runs a local language model. The small laptop runs a local language model. The small laptop runs a local language model. The small laptop runs a local language model. The small laptop runs a local language model. The small laptop runs a local language model. The small laptop runs a local language model. The small laptop runs a local language model. The small laptop runs a local language model. The small laptop runs a local language model. The small laptop runs a local language model. The small laptop runs a local language model. The small laptop runs a local language model. The small laptop runs a local language model. The small laptop runs a local language model. The small laptop runs a local language model. The small laptop runs a local language model. The small laptop runs a local language model. The small laptop runs a local language model. The small laptop runs a local language model. The small laptop runs a local language model. The small laptop runs a local language model. The small laptop runs a local language model. The small laptop runs a local language model. The small laptop runs a local language model. The small laptop runs a local language model. The small laptop runs a local language model. The small laptop runs a local language model. The small laptop runs a local language model. The small laptop runs a local language model. The small laptop runs a local language model. The small laptop runs a local language model. The small laptop runs a local language model. The small laptop runs a local language model. The small laptop runs a local language model. The small laptop runs a local language model. The small laptop runs a local language model. The small laptop runs a local language model. The small laptop runs a local language model. The small laptop runs a local language model. The small laptop runs a local language model. The small laptop runs a local language model. The small laptop runs a local language model. The small laptop runs a local language model. The small laptop runs a local language model. The small laptop runs a local language model. The small laptop runs a local language model. The small laptop runs a local language model. The small laptop runs a local language model. The small laptop runs a local language model. The small laptop runs a local language model. The small laptop runs a local language model. The small laptop runs a local language model. The small laptop runs a local language model. The small laptop runs a local language model. The small laptop runs a local language model. The small laptop runs a local language model. The small laptop runs a local language model. The small laptop runs a local language model. The small laptop runs a local language model. The small laptop runs a local language model. The small laptop runs a local language model. The small laptop runs a local language model. The small laptop runs a local language model. The small laptop runs a local language model. The small laptop runs a local language model. The small laptop runs a local language model. The small laptop runs a local language model. The small laptop runs a local language model. The small laptop runs a local language model. The small laptop runs a local language model. The small laptop runs a local language model. The small laptop runs a local language model. The small laptop runs a local language model. The small laptop runs a local language model. The small laptop runs a local language model. The small laptop runs a local language model. The small laptop runs a local language model. The small laptop runs a local language model. The small laptop runs a local language model. The small laptop runs a local language model. The small laptop runs a local language model. The small laptop runs a local language model. The small laptop runs a local language model. The small laptop runs a local language model. The small laptop runs a local language model. The small laptop runs a local language model. The small laptop runs a local language model. The small laptop runs a local language model. The small laptop runs a local language model. The small laptop runs a local language model. The small laptop runs a local language model. The small laptop runs a local language model. The small laptop runs a local language model. The small laptop runs a local language model. The small laptop runs a local language model. The small laptop runs a local language model. The small laptop runs a local language model. The small laptop runs a local language model. The small laptop runs a local language model. The small laptop runs a local language model. The small laptop runs a local language model. The small laptop runs a local language model. The small laptop runs a local language model. The small laptop runs a local language model. The small laptop runs a local language model. The small laptop runs a local language model. The small laptop runs a local language model. The small laptop runs a local language model. The small laptop runs a local language model. The small laptop runs a local language model. The small laptop runs a local language model. The small laptop runs a local language model. The small laptop runs a local language model. The small laptop runs a local language model. The small laptop runs a local language model. The small laptop runs a local language model. The small laptop runs a local language model. The small laptop runs a local language model. The small laptop runs a local language model. The small laptop runs a local language model. The small laptop runs a local language model. The small laptop runs a local language model. The small laptop runs a local language model. The small laptop runs a local language model. The small laptop runs a local language model. The small laptop runs a local language model. The small laptop runs a local language model. The small laptop runs a local language model. The small laptop runs a local language model. The small laptop runs a local language model. The small laptop runs a local language model. The small laptop runs a local language model. The small laptop runs a local language model. The small laptop runs a local language model. The small laptop runs a local language model. The small laptop runs a local language model. The small laptop runs a local language model. The small laptop runs a local language model. The small laptop runs a local language model. The small laptop runs a local language model. The small laptop runs a local language model. The small laptop runs a local language model. The small laptop runs a local language model. The small laptop runs a local language model. The small laptop runs a local language model. The small laptop runs a local language model. The small laptop runs a local language model. The small laptop runs a local language model. The small laptop runs a local language model. The small laptop runs a local language model. The small laptop runs a local language model. The small laptop runs a local language model. The small laptop runs a local language model. The small laptop runs a local language model. The small laptop runs a local language model. The small laptop runs a local language model. The small laptop runs a local language model. The small laptop runs a local language model. The small laptop runs a local language model. The small laptop runs a local language model. The small laptop runs a local language model. The small laptop runs a local language model. The small laptop runs a local language model. The small laptop runs a local language model. The small laptop runs a local language model. The small laptop runs a local language model. The small laptop runs a local language model. The small laptop runs a local language model. The small laptop runs a local language model. The small laptop runs a local language model. The small laptop runs a local language model. The small laptop runs a local language model. The small laptop runs a local language model. The small laptop runs a local language model. The small laptop runs a local language model. The small laptop runs a local language model. The small laptop runs a local language model. The small laptop runs a local language model. The small laptop runs a local language model. The small laptop runs a local language model. The small laptop runs a local language model. The small laptop runs a local language model. The small laptop runs a local language model. The small laptop runs a local language model. The small laptop runs a local language model. The small laptop runs a local language model. The small laptop runs a local language model. The small laptop runs a local language model. The small laptop runs a local language model. The small laptop runs a local language model. The small laptop runs a local language model. The small laptop runs a local language model. The small laptop runs a local language model. The small laptop runs a local language model. The small laptop runs a local language model. The small laptop runs a local language model. The small laptop runs a local language model. The small laptop runs a local language model. The small laptop runs a local language model. The small laptop runs a local language model. The small laptop runs a local language model. The small laptop runs a local language model. The small laptop runs a local language model. The small laptop runs a local language model. The small laptop runs a local language model. The small laptop runs a local language model. The small laptop runs a local language model. The small laptop runs a local language model. The small laptop runs a local language model. The small laptop runs a local language model. The small laptop runs a local language model. The small laptop runs a local language model. The small laptop runs a local language model. The small laptop runs a local language model. The small laptop runs a local language model. The small laptop runs a local language model. The small laptop runs a local language model. The small laptop runs a local language model. The small laptop runs a local language model. The small laptop runs a local language model. The small laptop runs a local language model. The small laptop runs a local language model. The small laptop runs a local language model. The small laptop runs a local language model. The small laptop runs a local language model. The small laptop runs a local language model. The small laptop runs a local language model. The small laptop runs a local language model. The small laptop runs a local language model. The small laptop runs a local language model. The small laptop runs a local language model. The small laptop runs a local language model. The small laptop runs a local language model. The small laptop runs a local language model. The small laptop runs a local language model. The small laptop runs a local language model. The small laptop runs a local language model. The small laptop runs a local language model. The small laptop runs a local language model. The small laptop runs a local language model. The small laptop runs a local language model. The small laptop runs a local language model. The small laptop runs a local language model. The small laptop runs a local language model. The small laptop runs a local language model. The small laptop runs a local language model. The small laptop runs a local language model. The small laptop runs a local language model. The small laptop runs a local language model. The small laptop runs a local language model. The small laptop runs a local language model. The small laptop runs a local language model. The small laptop runs a local language model. The small laptop runs a local language model. The small laptop runs a local language model. The small laptop runs a local language model. The small laptop runs a local language model. The small laptop runs a local language model. The small laptop runs a local language model. The small laptop runs a local language model. The small laptop runs a local language model. The small laptop runs a local language model. The small laptop runs a local language model. The small laptop runs a local language model. The small laptop runs a local language model. The small laptop runs a local language model. The small laptop runs a local language model. The small laptop runs a local language model. The small laptop runs a local language model. The small laptop runs a local language model. The small laptop runs a local language model. The small laptop runs a local language model. The small laptop runs a local language model. The small laptop runs a local language model. The small laptop runs a local language model. The small laptop runs a local language model. The small laptop runs a local language model. The small laptop runs a local language model. The small laptop runs a local language model. The small laptop runs a local language model. The small laptop runs a local language model. The small laptop runs a local language model. The small laptop runs a local language model. The small laptop runs a local language model. The small laptop runs a local language model. The small laptop runs a local language model. The small laptop runs a local language model. The small laptop runs a local language model. The small laptop runs a local language model. The small laptop runs a local language model. The small laptop runs a local language model. The small laptop runs a local language model. The small laptop runs a local language model. The small laptop runs a local language model. The small laptop runs a local language model. The small laptop runs a local language model. The small laptop runs a local language model. The small laptop runs a local language model. The small laptop runs a local language model. The small laptop runs a local language model. The small laptop runs a local language model. The small laptop runs a local language model. The small laptop runs a local language model. The small laptop runs a local language model. The small laptop runs a local language model. The small laptop runs a local language model. The small laptop runs a local language model. The small laptop runs a local language model. The small laptop runs a local language model. The small laptop runs a local language model. The small laptop runs a local language model. The small laptop runs a local language model. The small laptop runs a local language model. The small laptop runs a local language model. The small laptop runs a local language model. The small laptop runs a local language model. The small laptop runs a local language model. The small laptop runs a local language model. The small laptop runs a local language model. The small laptop runs a local language model. The small laptop runs a local language model. The small laptop runs a local language model. The small laptop runs a local language model. The small laptop runs a local language model. The small laptop runs a local language model. The small laptop runs a local language model. The small laptop runs a local language model. The small laptop runs a local language model. The small laptop runs a local language model. The small laptop runs a local language model. The small laptop runs a local language model. The small laptop runs a local language model. The small laptop runs a local language model. The small laptop runs a local language model. The small laptop runs a local language model. The small laptop runs a local language model. The small laptop runs a local language model. The small laptop runs a local language model. The small laptop runs a local language model. The small laptop runs a local language model. The small laptop runs a local language model. The small laptop runs a local language model. The small laptop runs a local language model. The small laptop runs a local language model. The small laptop runs a local language model. The small laptop runs a local language model. The small laptop runs a local language model. The small laptop runs a local language model. The small laptop runs a local language model. The small laptop runs a local language model. The small laptop runs a local language model. The small laptop runs a local language model. The small laptop runs a local language model. The small laptop runs a local language model. The small laptop runs a local language model. The small laptop runs a local language model. The small laptop runs a local language model. The small laptop runs a local language model. The small laptop runs a local language model. The small laptop runs a local language model. The small laptop runs a local language model. The small laptop runs a local language model. The small laptop runs a local language model. The small laptop runs a local language model. The small laptop runs a local language model. The small laptop runs a local language model. The small laptop runs a local language model. The small laptop runs a local language model. The small laptop runs a local language model. The small laptop runs a local language model. The small laptop runs a local language model. The small laptop runs a local language model. The small laptop runs a local language model. The small laptop runs a local language model. The small laptop runs a local language model. The small laptop runs a local language model. The small laptop runs a local language model. The small laptop runs a local language model. The small laptop runs a local language model. The small laptop runs a local language model. The small laptop runs a local language model. The small laptop runs a local language model. The small laptop runs a local language model. The small laptop runs a local language model. The small laptop runs a local language model. The small laptop runs a local language model. The small laptop runs a local language model. The small laptop runs a local language model. The small laptop runs a local language model. The small laptop runs a local language model. The small laptop runs a local language model. The small laptop runs a local language model. The small laptop runs a local language model. The small laptop runs a local language model. The small laptop runs a local language model. The small laptop runs a local language model. The small laptop runs a local language model. The small laptop runs a local language model. The small laptop runs a local language model. The small laptop runs a local language model. The small laptop runs a local language model. The small laptop runs a local language model. The small laptop runs a local language model. The small laptop runs a local language model. The small laptop runs a local language model. The small laptop runs a local language model. The small laptop runs a local language model. The small laptop runs a local language model. The small laptop runs a local language model. The small laptop runs a local language model. The small laptop runs a local language model. The small laptop runs a local language model. The small laptop runs a local language model. The small laptop runs a local language model. The small laptop runs a local language model. The small laptop runs a local language model. The small laptop runs a local language model. The small laptop runs a local language model. The small laptop runs a local language model. The small laptop runs a local language model. The small laptop runs a local language model. The small laptop runs a local language model. The small laptop runs a local language model. The small laptop runs a local language model. The small laptop runs a local language model. The small laptop runs a local language model. The small laptop runs a local language model. The small laptop runs a local language model. The small laptop runs a local language model. The small laptop runs a local language model. The small laptop runs a local language model. The small laptop runs a local language model. The small laptop runs a local language model. The small laptop runs a local language model. The small laptop runs a local language model. The small laptop runs a local language model. The small laptop runs a local language model. The small laptop runs a local language model. The small laptop runs a local language model. The small laptop runs a local language model. The small laptop runs a local language model. The small laptop runs a local language model. The small laptop runs a local language model. The small laptop runs a local language model. The small laptop runs a local language model. The small laptop runs a local language model. The small laptop runs a local language model. The small laptop runs a local language model. The small laptop runs a local language model. The small laptop runs a local language model. The small laptop runs a local language model. The small laptop runs a local language model. The small laptop runs a local language model. The small laptop runs a local language model. The small laptop runs a local language model. The small laptop runs a local language model. The small laptop runs a local language model. The small laptop runs a local language model. The small laptop runs a local language model. The small laptop runs a local language model. The small laptop runs a local language model. The small laptop runs a local language model. The small laptop runs a local language model. The small laptop runs a local language model. The small laptop runs a local language model. The small laptop runs a local language model. The small laptop runs a local language model. The small laptop runs a local language model. The small laptop runs a local language model. The small laptop runs a local language model. The small laptop runs a local language model. The small laptop runs a local language model. The small laptop runs a local language model. The small laptop runs a local language model. The small laptop runs a local language model. The small laptop runs a local language model. The small laptop runs a local language model. The small laptop runs a local language model. The small laptop runs a local language model. The small laptop runs a local language model. The small laptop runs a local language model. The small laptop runs a local language model. The small laptop runs a local language model. The small laptop runs a local language model. The small laptop runs a local language model. The small laptop runs a local language model. The small laptop runs a local language model. The small laptop runs a local language model. The small laptop runs a local language model. The small laptop runs a local language model. The small laptop runs a local language model. The small laptop runs a local language model. The small laptop runs a local language model. The small laptop runs a local language model. The small laptop runs a local language model. The small laptop runs a local language model. The small laptop runs a local language model. The small laptop runs a local language model. The small laptop runs a local language model. The small laptop runs a local language model. The small laptop runs a local language model. The small laptop runs a local language model. The small laptop runs a local language model. The small laptop runs a local language model. The small laptop runs a local language model. The small laptop runs a local language model. The small laptop runs a local language model. The small laptop runs a local language model. The small laptop runs a local language model. The small laptop runs a local language model. The small laptop runs a local language model. The small laptop runs a local language model. The small laptop runs a local language model. The small laptop runs a local language model. The small laptop runs a local language model. The small laptop runs a local language model. The small laptop runs a local language model. The small laptop runs a local language model. The small laptop runs a local language model. The small laptop runs a local language model. The small laptop runs a local language model. The small laptop runs a local language model. The small laptop runs a local language model. The small laptop runs a local language model. The small laptop runs a local language model. The small laptop runs a local language model. The small laptop runs a local language model. The small laptop runs a local language model. The small laptop runs a local language model. The small laptop runs a local language model. The small laptop runs a local language model. The small laptop runs a local language model. The small laptop runs a local language model. The small laptop runs a local language model. The small laptop runs a local language model. The small laptop runs a local language model. The small laptop runs a local language model. The small laptop runs a local language model. The small laptop runs a local language model. The small laptop runs a local language model. The small laptop runs a local language model. The small laptop runs a local language model. The small laptop runs a local language model. The small laptop runs a local language model. The small laptop runs a local language model. The small laptop runs a local language model. The small laptop runs a local language model. The small laptop runs a local language model. The small laptop runs a local language model. The small laptop runs a local language model. The small laptop runs a local language model. The small laptop runs a local language model. The small laptop runs a local language model. The small laptop runs a local language model. The small laptop runs a local language model. The small laptop runs a local language model. The small laptop runs a local language model. The small laptop runs a local language model. The small laptop runs a local language model. The small laptop runs a local language model. The small laptop runs a local language model. The small laptop runs a local language model. The small laptop runs a local language model. The small laptop runs a local language model. The small laptop runs a local language model. The small laptop runs a local language model. The small laptop runs a local language model. The small laptop runs a local language model. The small laptop runs a local language model. The small laptop runs a local language model. The small laptop runs a local language model. The small laptop runs a local language model. The small laptop runs a local language model. The small laptop runs a local language model. The small laptop runs a local language model. The small laptop runs a local language model. The small laptop runs a local language model. The small laptop runs a local language model. The small laptop runs a local language model. The small laptop runs a local language model. The small laptop runs a local language model. The small laptop runs a local language model. The small laptop runs a local language model. The small laptop runs a local language model. The small laptop runs a local language model. The small laptop runs a local language model. The small laptop runs a local language model. The small laptop runs a local language model. The small laptop runs a local language model. The small laptop runs a local language model. The small laptop runs a local language model. The small laptop runs a local language model. The small laptop runs a local language model. The small laptop runs a local language model. The small laptop runs a local language model. The small laptop runs a local language model. The small laptop runs a local language model. The small laptop runs a local language model. The small laptop runs a local language model. The small laptop runs a local language model. The small laptop runs a local language model. The small laptop runs a local language model. The small laptop runs a local language model. The small laptop runs a local language model. The small laptop runs a local language model. The small laptop runs a local language model. The small laptop runs a local language model. The small laptop runs a local language model. The small laptop runs a local language model. The small laptop runs a local language model. The small laptop runs a local language model. The small laptop runs a local language model. The small laptop runs a local language model. The small laptop runs a local language model. The small laptop runs a local language model. The small laptop runs a local language model. The small laptop runs a local language model. The small laptop runs a local language model. The small laptop runs a local language model. The small laptop runs a local language model. The small laptop runs a local language model. The small laptop runs a local language model. The small laptop runs a local language model. The small laptop runs a local language model. The small laptop runs a local language model. The small laptop runs a local language model. The small laptop runs a local language model. The small laptop runs a local language model. The small laptop runs a local language model. The small laptop runs a local language model. The small laptop runs a local language model. The small laptop runs a local language model. The small laptop runs a local language model. The small laptop runs a local language model. The small laptop runs a local language model. The small laptop runs a local language model. The small laptop runs a local language model. The small laptop runs a local language model. The small laptop runs a local language model. The small laptop runs a local language model. The small laptop runs a local language model. The small laptop runs a local language model. The small laptop runs a local language model. The small laptop runs a local language model. The small laptop runs a local language model. The small laptop runs a local language model. The small laptop runs a local language model. The small laptop runs a local language model. The small laptop runs a local language model. The small laptop runs a local language model. The small laptop runs a local language model. The small laptop runs a local language model. The small laptop runs a local language model. The small laptop runs a local language model. The small laptop runs a local language model. The small laptop runs a local language model. The small laptop runs a local language model. The small laptop runs a local language model. The small laptop runs a local language model. The small laptop runs a local language model. The small laptop runs a local language model. The small laptop runs a local language model. The small laptop runs a local language model. The small laptop runs a local language model. The small laptop runs a local language model. The small laptop runs a local language model. The small laptop runs a local language model. The small laptop runs a local language model. The small laptop runs a local language model. The small laptop runs a local language model. The small laptop runs a local language model. The small laptop runs a local language model. The small laptop runs a local language model. The small laptop runs a local language model. The small laptop runs a local language model. The small laptop runs a local language model. The small laptop runs a local language model. The small laptop runs a local language model. The small laptop runs a local language model. The small laptop runs a local language model. The small laptop runs a local language model. The small laptop runs a local language model. The small laptop runs a local language model. The small laptop runs a local language model. The small laptop runs a local language model. The small laptop runs a local language model. The small laptop runs a local language model. The small laptop runs a local language model. The small laptop runs a local language model. The small laptop runs a local language model. The small laptop runs a local language model. The small laptop runs a local language model. The small laptop runs a local language model. The small laptop runs a local language model. The small laptop runs a local language model. The small laptop runs a local language model. The small laptop runs a local language model. The small laptop runs a local language model. The small laptop runs a local language model. The small laptop runs a local language model. The small laptop runs a local language model. The small laptop runs a local language model. The small laptop runs a local language model. The small laptop runs a local language model. The small laptop runs a local language model. The small laptop runs a local language model. The small laptop runs a local language model. The small laptop runs a local language model. The small laptop runs a local language model. The small laptop runs a local language model. The small laptop runs a local language model. The small laptop runs a local language model. The small laptop runs a local language model. \nWhat access code did I ask you to remember? Reply with the code only."
+          }
+        ]
+      },
+      "expected": "violet-742",
+      "passed": true,
+      "wall_s": 247.304,
+      "response": {
+        "id": "chatcmpl-55e1fbb9be184d47840dc510",
+        "object": "chat.completion",
+        "created": 1794533880,
+        "model": "qwen3.8-flash-next-iq3_xxs-gtx1650-hc-q8",
+        "choices": [
+          {
+            "index": 0,
+            "message": {
+              "role": "assistant",
+              "content": "violet-742"
+            },
+            "finish_reason": "stop"
+          }
+        ],
+        "usage": {
+          "prompt_tokens": 8169,
+          "completion_tokens": 7,
+          "total_tokens": 8176,
+          "prompt_tokens_details": {
+            "cached_tokens": 0
+          }
+        },
+        "timings": {
+          "cache_n": 0,
+          "prompt_n": 8169,
+          "prompt_ms": 246493.5,
+          "prompt_per_token_ms": 30.174,
+          "prompt_per_second": 33.1,
+          "predicted_n": 7,
+          "predicted_ms": 801.9,
+          "predicted_per_token_ms": 114.557,
+          "predicted_per_second": 8.7,
+          "draft_n": 0,
+          "draft_n_accepted": 0
+        }
+      }
+    }
+  ]
+}

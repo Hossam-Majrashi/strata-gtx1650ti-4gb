@@ -1,0 +1,52 @@
+strata generate: CPU expert kernels: AVX-2
+strata generate: native pack: $DATA/packs/iq3_xxs experts (largest blob 2.33 MB), token embedding IQ3_S in mapped host memory (260 MiB, 0.5 s)
+strata generate: STRATA_WEIGHT_ARENA_HOST=1: 1466 MiB of canonical weights in pinned RAM; the GPU reads the same bytes over PCIe (experimental, slower decode)
+strata generate: 1466 MiB of weights loaded from $DATA/packs/iq3_xxs in 1.1 s (302 canonical tensors skipped: served natively)
+native dense: STRATA_NATIVE_POOL=1: immutable weights use pooled CUDA allocations, unchanged bytes
+strata generate: 300 native projection matrices, 1781.11 MiB of weights, in 1.2 s
+strata generate: STRATA_WEIGHT_CACHE_MIB=160: 159.94 MiB in 53 whole tensors cached in VRAM, unchanged bytes
+strata generate: PLE direct read probe: 54219 rows/s (fine)
+strata generate: the SSD is kept awake while rows are read: one page of the table after 100 ms without a read, until 60 s after the last request (STRATA_SSD_KEEPALIVE=0 turns it off)
+strata generate: profile $REPO/data/expert-profile.bin: 24576 ranked pairs, built for 24576 slots
+strata generate: PLE on, table 320001536 rows of $DATA/models/IQ3_XXS/Qwen3.8-Flash-Next-GSQ-RCO-IQ3_XXS-00002-of-00002.gguf
+strata generate: experimental native Q5_K head, 437043200 bytes, in 0.1 s
+strata generate: GPU 0: NVIDIA GeForce GTX 1650 Ti, compute capability 7.5
+strata generate: expert arena read through the file cache (buffered (not Windows))
+strata generate: expert arena: cudaHostRegister PORTABLE ok; MAP_HUGETLB unavailable (needed 20464 2 MiB pages, vm.nr_hugepages=0); transparent huge pages are on for every mapping (THP always): MADV_HUGEPAGE not requested
+strata generate: loaded 39.97 GiB at 1.41 GiB/s
+strata generate: GPU host-callback thread started before host-core pinning
+strata generate: CPU pool tasks/phase: 12 (automatic), participating threads: 4
+strata generate: 3 pool workers on logical processors 1,2,3, the host thread on 0 (draining too) (--host-core first)
+strata generate: CPU workers on logical processors 1,2,3 (3 workers, one per physical core; host on 0)
+strata aux cpus: threads that are neither pool workers nor the host go to CPUs 4 (off at start; a request's aux_cpus=1 turns it on)
+strata generate: expert cache 42 slots, 0.07 GiB of VRAM; policy is
+strata generate: the GPU computes the experts in the cache; it rounds differently from the CPU,
+                 so a reply can differ slightly from a run without the cache (same quality:
+                 bench/results/2026-09-27-cache-parity).
+                 PROFILE, ranked by routing frequency, no eviction.
+strata generate: pre-filled 42 of 42 slots from the profile in 0.0 s (2429 MB/s); slot 0 verified
+strata generate: R4 hit path ON - resident experts are computed on the GPU
+strata generate: 3 expert-pool workers + the host thread
+strata generate: session is up (engine 0.1.59.1)
+strata generate: sampling greedy
+strata generate: token graph hit path: 42 resident experts, decided on the device
+strata generate: prompt path allocates its own buffers (no cache slots to borrow)
+strata prefill: QSA layers: norm + rope in one pass on, attention gate in the attention epilogue off
+strata generate: prefill 19 tokens in 1 chunks, 2037.5 ms (9.3 tok/s); experts streamed 3520 (3520 by DMA, host 9.0 ms), resident 16, on the CPU 0 (share 0.00); PLE 0.1 ms
+strata hc: CUDA0: the hyper-connection read runs as staged (the norm per token and stream, the down projection's activations staged ahead by cp.async); checked bit for bit against the plain read on this card (STRATA_HC_SPLIT=1 or 0 for the earlier ones)
+strata verify: window up to 2 tokens, 46.8 MiB of device buffers
+strata verify: capturing the 1-token window (274 MiB of VRAM free)
+strata verify: captured the 1-token window (upload no error, sync no error) in 8.3 ms
+strata verify: capturing the 2-token window (258 MiB of VRAM free)
+strata verify: captured the 2-token window (upload no error, sync no error) in 12.6 ms
+speculation              16 rounds of 2, drafts accepted 0 of 15 (0.000), 1.00 tokens per round
+follow                   8 of 16 emitted tokens differ from the argmax
+accepted per round       0:16 1:0
+verify window            wait for rings 126.629  pool 82.635  host 0.018  commit 0.014 ms/round; CPU experts 11.10 distinct / 12.92 routed per layer
+pool multi               gate/up 62.194  quantize 0.303  down 19.674 ms/round; 11.4 GB/s over the rows phases; CPU pool call 82.598 ms/round
+dispatch                 plan 0.117  activation quantize 0.235  jobs 0.041  run 82.187 ms/round
+pcie experts             6.29 distinct experts per layer read over PCIe (share 102/256 of the misses)
+prompt  : 248045 846 198 7734 264 2716 1103 314 2250 7736 13 248046 198 248045 74455 198 248068 271 248069 271
+output  : 5844 11 5983 11 321 6105 513 4047 7736 13 1061 369 264 2716 69892 39811
+decode                   16 tokens in 3421.3 ms  ->  4.68 tok/s
+prefill                  19 tokens in 2037.5 ms  ->  9.33 tok/s  (time to first token 2987.4 ms)

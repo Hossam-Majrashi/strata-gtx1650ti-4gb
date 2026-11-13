@@ -59,6 +59,30 @@ class LauncherTest(unittest.TestCase):
             self.assertEqual(fast["args"][fast["args"].index("--max-context") + 1], "8192")
             self.assertNotIn("--prompt-cache", config["args"])
             self.assertEqual(fast["args"][fast["args"].index("--prompt-cache") + 1], "0")
+            fast_bytes = (root / "gtx1650-fast.json").read_bytes()
+            for profile in ("cached", "hc-q8"):
+                with self.subTest(profile=profile):
+                    result = subprocess.run([sys.executable, str(SCRIPT), "--data-dir", str(root),
+                                             "--engine", str(root / "strata"), "--profile", profile,
+                                             "--write-config-only"], check=True, capture_output=True, text=True)
+                    extra = json.loads((root / f"gtx1650-{profile}.json").read_text())
+                    self.assertEqual(extra["env"]["STRATA_NATIVE_POOL"], "1")
+                    self.assertEqual(extra["args"][extra["args"].index("--max-context") + 1], "8192")
+                    self.assertEqual(extra["args"][extra["args"].index("--kv") + 1], "int8")
+                    self.assertNotIn("--prompt-cache", extra["args"])
+                    if profile == "cached":
+                        self.assertEqual(extra["env"]["STRATA_WEIGHT_CACHE_MIB"], "160")
+                        self.assertNotIn("STRATA_HC_Q8", extra["env"])
+                        self.assertNotIn("STRATA_HEAD_HOST", extra["env"])
+                    else:
+                        self.assertEqual(extra["env"]["STRATA_HC_Q8"], "1")
+                        self.assertEqual(extra["env"]["STRATA_HEAD_HOST"], "1")
+                        self.assertEqual(extra["args"][extra["args"].index("--prefill") + 1], "128")
+                        self.assertEqual(extra["args"][extra["args"].index("--expert-cache") + 1], "8")
+                        self.assertIn("changes HC weight precision", result.stdout)
+            self.assertEqual((root / "gtx1650.json").read_bytes(), stable_bytes)
+            self.assertEqual((root / "gtx1650-fast.json").read_bytes(), fast_bytes)
+            self.assertEqual(original.read_text(), "user config")
 
 
 if __name__ == "__main__":

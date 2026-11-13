@@ -56,7 +56,8 @@ public:
     static const uint16_t* hc_bf16_view(const WeightRef& w, void* stream, int slot, int cls);
     static void hc_bf16_release(void* stream, int slot, int cls);
     uint64_t weight_bytes() const { return bytes_; }
-    /// What the device lost to `load`: each matrix rounded up to the granule `cudaMalloc` backs it with.
+    /// Conservative planning estimate: each matrix rounded up to a cudaMalloc granule. The opt-in
+    /// STRATA_NATIVE_POOL allocator packs them more tightly; use device snapshots for its actual footprint.
     uint64_t allocated_bytes() const { return allocated_; }
     size_t tensor_count() const { return weights_.size() - packed_keys_.size(); }
 

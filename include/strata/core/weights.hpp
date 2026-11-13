@@ -150,6 +150,7 @@ public:
 
 private:
     friend class NativeDense;
+    friend class MappedWeightArena; // Optional exact-byte prefix cache, before any graph binds the table.
     std::map<std::string, WeightRef> table_;
     LoadReport report_;
     std::string pack_dir_;

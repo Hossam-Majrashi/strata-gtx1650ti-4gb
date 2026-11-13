@@ -5313,6 +5313,30 @@ int main(int argc, char** argv) {
         std::fprintf(stderr, "strata generate: %zu native projection matrices, %.2f MiB of weights, in %.1f s\n",
                      native_dense.tensor_count(), (double) native_dense.weight_bytes() / (1024.0 * 1024.0), load_s());
     }
+#if !defined(STRATA_USE_HIP) && !defined(STRATA_HIP_GFX906) && !defined(STRATA_GPU_METAL)
+    // Opt-in exact-byte prefix cache of the mapped arena, before any session captures its pointers.
+    if (const char* request = std::getenv("STRATA_WEIGHT_CACHE_MIB")) {
+        char* end = nullptr;
+        const unsigned long long mib = std::strtoull(request, &end, 10);
+        if (end == request || *end != '\0' || mib > 1024) {
+            std::fprintf(stderr, "strata generate: STRATA_WEIGHT_CACHE_MIB must be an integer from 0 to 1024\n");
+            return 1;
+        }
+        if (mib != 0) {
+            if (!weight_arena_host || multi_gpu) {
+                std::fprintf(stderr, "strata generate: STRATA_WEIGHT_CACHE_MIB needs STRATA_WEIGHT_ARENA_HOST=1 and one CUDA GPU\n");
+                return 1;
+            }
+            const cudaError_t ce = host_weight_arena.cache_prefix(wt, (size_t) mib << 20);
+            if (ce != cudaSuccess) {
+                std::fprintf(stderr, "strata generate: mapped weight prefix cache failed: %s\n", cudaGetErrorString(ce));
+                return 1;
+            }
+            std::fprintf(stderr, "strata generate: STRATA_WEIGHT_CACHE_MIB=%llu: %.2f MiB in %zu whole tensors cached in VRAM, unchanged bytes\n",
+                         mib, host_weight_arena.cached_bytes() / 1048576.0, host_weight_arena.cached_tensors());
+        }
+    }
+#endif
     // ---- THE LAYER SPLIT'S SPILL WALK, STEP 1: THE TRIM.  CUDA0 holds the whole dense set now; every later card is about to load a copy of it (3.5 GiB for IQ3_S), which on a
     // card that is short (two 8 GB cards: 6 of 6 starts failed in 0.2.10) is what leaves its expert cache and its prompt path no room.  A card that cannot afford the copy
     // beside its session, its head, its drafter and a working cache loads only the dense weights of its own layers instead (--trim-stage-weights, bit-exact in itself:

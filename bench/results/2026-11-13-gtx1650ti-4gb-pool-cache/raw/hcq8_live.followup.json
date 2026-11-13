@@ -1,0 +1,252 @@
+{
+  "label": "hcq8_live",
+  "health": {
+    "status": "ok",
+    "max_context": 8192,
+    "model": "qwen3.8-flash-next-iq3_xxs-gtx1650-hc-q8",
+    "images": false,
+    "api_key": false,
+    "image_generation": false,
+    "loaded": true,
+    "service": "strata"
+  },
+  "turns": [
+    {
+      "turn": 1,
+      "request": {
+        "model": "qwen3.8-flash-next-iq3_xxs-gtx1650-hc-q8",
+        "messages": [
+          {
+            "role": "user",
+            "content": "The session code is amber-29. Remember it. Reply only OK."
+          }
+        ],
+        "temperature": 0,
+        "max_tokens": 32,
+        "chat_template_kwargs": {
+          "enable_thinking": false
+        },
+        "stream": true,
+        "stream_options": {
+          "include_usage": true
+        }
+      },
+      "content": "OK",
+      "ttft_s": 3.1836374630001956,
+      "wall_s": 3.2979229070042493,
+      "events": [
+        {
+          "id": "chatcmpl-256b91b2c198409d87871df4",
+          "object": "chat.completion.chunk",
+          "created": 1794535117,
+          "model": "qwen3.8-flash-next-iq3_xxs-gtx1650-hc-q8",
+          "choices": [
+            {
+              "index": 0,
+              "delta": {
+                "role": "assistant",
+                "content": ""
+              },
+              "finish_reason": null
+            }
+          ]
+        },
+        {
+          "id": "chatcmpl-256b91b2c198409d87871df4",
+          "object": "chat.completion.chunk",
+          "created": 1794535117,
+          "model": "qwen3.8-flash-next-iq3_xxs-gtx1650-hc-q8",
+          "choices": [
+            {
+              "index": 0,
+              "delta": {
+                "content": "OK"
+              },
+              "finish_reason": null
+            }
+          ]
+        },
+        {
+          "id": "chatcmpl-256b91b2c198409d87871df4",
+          "object": "chat.completion.chunk",
+          "created": 1794535117,
+          "model": "qwen3.8-flash-next-iq3_xxs-gtx1650-hc-q8",
+          "choices": [
+            {
+              "index": 0,
+              "delta": {},
+              "finish_reason": "stop"
+            }
+          ],
+          "usage": {
+            "prompt_tokens": 28,
+            "completion_tokens": 2,
+            "total_tokens": 30,
+            "prompt_tokens_details": {
+              "cached_tokens": 0
+            }
+          },
+          "timings": {
+            "cache_n": 0,
+            "prompt_n": 28,
+            "prompt_ms": 3054.2,
+            "prompt_per_token_ms": 109.079,
+            "prompt_per_second": 9.2,
+            "predicted_n": 2,
+            "predicted_ms": 240.9,
+            "predicted_per_token_ms": 120.45,
+            "predicted_per_second": 8.3,
+            "draft_n": 0,
+            "draft_n_accepted": 0
+          }
+        }
+      ],
+      "passed": true
+    },
+    {
+      "turn": 2,
+      "request": {
+        "model": "qwen3.8-flash-next-iq3_xxs-gtx1650-hc-q8",
+        "messages": [
+          {
+            "role": "user",
+            "content": "The session code is amber-29. Remember it. Reply only OK."
+          },
+          {
+            "role": "assistant",
+            "content": "OK"
+          },
+          {
+            "role": "user",
+            "content": "What is the session code? Reply only with the code."
+          }
+        ],
+        "temperature": 0,
+        "max_tokens": 32,
+        "chat_template_kwargs": {
+          "enable_thinking": false
+        },
+        "stream": true,
+        "stream_options": {
+          "include_usage": true
+        }
+      },
+      "content": "amber-29",
+      "ttft_s": 3.0063386539986823,
+      "wall_s": 3.474589017998369,
+      "events": [
+        {
+          "id": "chatcmpl-4c96aeea94b54b16a652de6b",
+          "object": "chat.completion.chunk",
+          "created": 1794535120,
+          "model": "qwen3.8-flash-next-iq3_xxs-gtx1650-hc-q8",
+          "choices": [
+            {
+              "index": 0,
+              "delta": {
+                "role": "assistant",
+                "content": ""
+              },
+              "finish_reason": null
+            }
+          ]
+        },
+        {
+          "id": "chatcmpl-4c96aeea94b54b16a652de6b",
+          "object": "chat.completion.chunk",
+          "created": 1794535120,
+          "model": "qwen3.8-flash-next-iq3_xxs-gtx1650-hc-q8",
+          "choices": [
+            {
+              "index": 0,
+              "delta": {
+                "content": "amber"
+              },
+              "finish_reason": null
+            }
+          ]
+        },
+        {
+          "id": "chatcmpl-4c96aeea94b54b16a652de6b",
+          "object": "chat.completion.chunk",
+          "created": 1794535120,
+          "model": "qwen3.8-flash-next-iq3_xxs-gtx1650-hc-q8",
+          "choices": [
+            {
+              "index": 0,
+              "delta": {
+                "content": "-"
+              },
+              "finish_reason": null
+            }
+          ]
+        },
+        {
+          "id": "chatcmpl-4c96aeea94b54b16a652de6b",
+          "object": "chat.completion.chunk",
+          "created": 1794535120,
+          "model": "qwen3.8-flash-next-iq3_xxs-gtx1650-hc-q8",
+          "choices": [
+            {
+              "index": 0,
+              "delta": {
+                "content": "2"
+              },
+              "finish_reason": null
+            }
+          ]
+        },
+        {
+          "id": "chatcmpl-4c96aeea94b54b16a652de6b",
+          "object": "chat.completion.chunk",
+          "created": 1794535120,
+          "model": "qwen3.8-flash-next-iq3_xxs-gtx1650-hc-q8",
+          "choices": [
+            {
+              "index": 0,
+              "delta": {
+                "content": "9"
+              },
+              "finish_reason": null
+            }
+          ]
+        },
+        {
+          "id": "chatcmpl-4c96aeea94b54b16a652de6b",
+          "object": "chat.completion.chunk",
+          "created": 1794535120,
+          "model": "qwen3.8-flash-next-iq3_xxs-gtx1650-hc-q8",
+          "choices": [
+            {
+              "index": 0,
+              "delta": {},
+              "finish_reason": "stop"
+            }
+          ],
+          "usage": {
+            "prompt_tokens": 55,
+            "completion_tokens": 5,
+            "total_tokens": 60,
+            "prompt_tokens_details": {
+              "cached_tokens": 29
+            }
+          },
+          "timings": {
+            "cache_n": 29,
+            "prompt_n": 26,
+            "prompt_ms": 2889.6,
+            "prompt_per_token_ms": 111.138,
+            "prompt_per_second": 9.0,
+            "predicted_n": 5,
+            "predicted_ms": 583.1,
+            "predicted_per_token_ms": 116.62,
+            "predicted_per_second": 8.6,
+            "draft_n": 0,
+            "draft_n_accepted": 0
+          }
+        }
+      ],
+      "passed": true
+    }
+  ]
+}

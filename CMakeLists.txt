@@ -599,6 +599,12 @@ if(STRATA_ENABLE_CUDA AND STRATA_BUILD_TESTS AND NOT STRATA_HIP_GFX906)
   target_link_libraries(mapped_weight_arena_test PRIVATE strata_core CUDA::cudart)
   add_test(NAME mapped_weight_arena_test COMMAND mapped_weight_arena_test)
   set_tests_properties(mapped_weight_arena_test PROPERTIES SKIP_RETURN_CODE 77 TIMEOUT 60)
+  add_executable(mapped_weight_cache_test tests/cuda/mapped_weight_cache_test.cu)
+  target_link_libraries(mapped_weight_cache_test PRIVATE strata_core CUDA::cudart)
+  add_test(NAME mapped_weight_cache_test COMMAND mapped_weight_cache_test)
+  set_tests_properties(mapped_weight_cache_test PROPERTIES SKIP_RETURN_CODE 77 TIMEOUT 60)
+  add_test(NAME native_dense_ple_key_test_pooled COMMAND native_dense_ple_key_test)
+  set_tests_properties(native_dense_ple_key_test_pooled PROPERTIES SKIP_RETURN_CODE 77 TIMEOUT 60 ENVIRONMENT "STRATA_NATIVE_POOL=1")
 endif()
 
 # CUDA release kernels must not spill or keep a per-thread array in local memory: every access there is a round trip

@@ -1,0 +1,100 @@
+{
+  "date": "2026-11-13",
+  "status": "local exploratory pool/cache tuning; not the standard benchmark protocol",
+  "engine_source": "5d42aa0883f466cea0998544bf6e6bbec2bbfdd5 plus the opt-in CUDA allocation/cache patch; source hashes below",
+  "engine_version": "0.1.59.1",
+  "engine_sha256": "87af0e9e62396beee1a694d5335cbd1cfd15ca4802f86d58454cdf6762ad20b3",
+  "build": {
+    "type": "Release",
+    "STRATA_ENABLE_CUDA": "ON",
+    "CMAKE_CUDA_ARCHITECTURES": "75",
+    "STRATA_BUILD_TESTS": "ON",
+    "STRATA_PORTABLE": "ON",
+    "cuda_nvcc": "13.4.92",
+    "host_compiler": "GCC 16.2.1"
+  },
+  "hardware": {
+    "gpu": "NVIDIA GeForce GTX 1650 Ti",
+    "vram_mib": 4096,
+    "engine_visible_vram_mib": 3729,
+    "cpu": "Intel Core i5-10300H, 4 cores / 8 threads",
+    "system_ram_gib_approx": 62.6,
+    "pcie_max": "Gen3 x16; idle query reported Gen1 x16",
+    "storage": "NVMe SSD; not storage-benchmarked",
+    "os": "Linux 7.3.3-1-cachyos x86_64",
+    "nvidia_driver": "620.70.06",
+    "power_clock_changes": "none made for these experiments",
+    "background": "graphical desktop and coding-agent tools remained open; not an isolated benchmark host",
+    "paging": "system swap/zram in use, about 2.9 GiB in a later snapshot; not process-specific"
+  },
+  "model": {
+    "repository": "ISTA-DASLab/Qwen3.8-Flash-Next-GSQ-RCO-GGUF",
+    "quantization": "IQ3_XXS",
+    "repository_revision": null,
+    "repository_revision_note": "not recorded for the already downloaded model",
+    "shards": [
+      {
+        "name": "Qwen3.8-Flash-Next-GSQ-RCO-IQ3_XXS-00001-of-00002.gguf",
+        "bytes": 47039860096
+      },
+      {
+        "name": "Qwen3.8-Flash-Next-GSQ-RCO-IQ3_XXS-00002-of-00002.gguf",
+        "bytes": 28800138432
+      }
+    ],
+    "full_gguf_sha256": null,
+    "full_gguf_sha256_note": "not measured",
+    "native_pack_index_sha256": "1afe12b36cd2d13bf122b741fa0e81e1f751319cc3c451e54ba75524d825f148",
+    "chat_template_sha256": "12827f24b742ea4e80cdc12dbcf9622227056b9f797252a3149263d4f9aaadce",
+    "expert_profile_sha256": "8f59b4aa8873209dff11c11e37bcda9529a1335b724a1afeea37bf6388975baf"
+  },
+  "previous_engine_sha256": "4fbe3ea2702acf9d937955b068f211ad8e2d9d7a25410255d21dc21bfbccd977",
+  "reference_revisions": {
+    "basalt": "b422e200dde88d0b781d8c71c6709b9e0a99af0a",
+    "llamAmpere": "a5d8684ce8e833fb077f8210495cd1a905ed3a45"
+  },
+  "references_note": "source review only; no other engine or model pack was built or executed",
+  "source_sha256": {
+    "CMakeLists.txt": "1f81271034307703b5d9a110358af05555675929765fdc6ec2a4b84dd612a4e7",
+    "include/strata/core/cuda_weight_alloc.hpp": "dd257eafe776c59e08df048657bfb5c840276a5f7ecf5541accfeed9ad61e351",
+    "include/strata/core/mapped_weight_arena.hpp": "0aa0d409e28ab67646b9335735d7c43a225482d444675f90922cac80d57d52cd",
+    "include/strata/core/weights.hpp": "05c490732b723adc16bc679c252a8293b16be131ec57ee641082dfe16492586d",
+    "include/strata/core/native_dense.hpp": "a424f333b8e9efcb529218e5c68158bcd2f4e513e16efa69ae1590c3a0d08ebb",
+    "src/core/native_dense.cpp": "ec20605176ab0cce2058457aee96ae404b98cbd562671b683bc84bd416b6c448",
+    "src/program/generate.cpp": "cff4f368d37fbe2194bdf77af96750b5061b3fda0176884c57c02b860827724c",
+    "tests/cuda/mapped_weight_cache_test.cu": "e1a6a83571b688e24e37ec4001d21022a9437fd3bfa1492bccd32202b7aa9563",
+    "tools/run_gtx1650.py": "76b1199562b4205d84272826c169ef0b0d606b9cee8b0bd588809a688f1f40ca",
+    "tools/test_run_gtx1650.py": "e178913069df5c8fa4e38255fef623892e9122da88204d6d2bf5574462c5ac3b",
+    "tools/bench_gtx1650.py": "ba255fcbe8039343233f1d26b0c402e62f0f42e2813ad256094509db2f12e3c0"
+  },
+  "compatibility_checks": {
+    "stable_and_fast_config_and_stdout": "byte-identical to 5d42aa08",
+    "controlled_window_hashes": "old/new-disabled/cached match on 16 teacher-forced windows, CPU prompt share off and adaptation frozen; not general sampling equivalence"
+  },
+  "runtime_precision": {
+    "fast": "original prepared IQ3_XXS pack, no additional HC requantization",
+    "cached": "same bytes as fast; exact-byte prefix relocation",
+    "hc-q8": "same source GGUF files, additional runtime HC Q8_0 requantization"
+  },
+  "previous_binary_experiments": [
+    "fast_profile",
+    "timed",
+    "async_shim",
+    "ngram",
+    "fast_old",
+    "hash_old"
+  ],
+  "new_binary_experiments": [
+    "pool_cache192",
+    "pool_cache160",
+    "pooled_hcq8",
+    "pooled_hcq8_room",
+    "cached_final",
+    "hcq8_final",
+    "fast_new",
+    "hash_new",
+    "hash_cached",
+    "hcq8_live",
+    "cached_live"
+  ]
+}

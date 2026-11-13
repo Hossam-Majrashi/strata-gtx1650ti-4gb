@@ -14,8 +14,9 @@ def main():
     parser.add_argument("--data-dir", type=Path, required=True, help="prepared Strata data directory")
     parser.add_argument("--engine", type=Path, default=ROOT / "build-gtx1650" / "strata")
     parser.add_argument("--port", type=int, default=8080)
-    parser.add_argument("--profile", choices=("stable", "fast"), default="stable",
-                        help="stable: original small-VRAM settings; fast: opt-in measured tuning (needs more free VRAM)")
+    parser.add_argument("--profile", choices=("stable", "fast", "cached", "hc-q8"), default="stable",
+                        help="stable: original; fast: first tuning; cached: exact-byte VRAM prefix cache; "
+                             "hc-q8: EXPERIMENTAL HC requantization (changes precision)")
     parser.add_argument("--no-prompt-cache", action="store_true", help="disable prompt checkpoints for fresh-prompt benchmarks")
     parser.add_argument("--write-config-only", action="store_true", help="write config without starting the server")
     args = parser.parse_args()
@@ -44,22 +45,29 @@ def main():
             "--conversation-cache-mib", "0", "--spec", "2",
         ],
     }
-    if args.profile == "fast":
-        # Keep the same GGUF bytes: no HC requantization or smaller KV/context.
+    if args.profile != "stable":
+        # Start from the first fast profile. Only hc-q8 below opts into HC requantization.
         config["env"].pop("STRATA_HEAD_HOST")
         config["env"]["STRATA_SM75_PERF"] = "1"
         config["args"][config["args"].index("--prefill") + 1] = "256"
         config["args"].extend(["--short-read", "0"])
-        config["model_name"] += "-fast"
-        config["log"] = str(engine.parent / "gtx1650-fast.engine.log")
-        if "STRATA_HEAD_HOST" in os.environ:
+        config["model_name"] += "-" + args.profile
+        config["log"] = str(engine.parent / f"gtx1650-{args.profile}.engine.log")
+        if args.profile == "cached":
+            config["env"].update({"STRATA_NATIVE_POOL": "1", "STRATA_WEIGHT_CACHE_MIB": "160"})
+        elif args.profile == "hc-q8":
+            config["env"].update({"STRATA_NATIVE_POOL": "1", "STRATA_HC_Q8": "1", "STRATA_HEAD_HOST": "1"})
+            config["args"][config["args"].index("--prefill") + 1] = "128"
+            config["args"][config["args"].index("--expert-cache") + 1] = "8"
+            print("EXPERIMENTAL hc-q8: changes HC weight precision; not a quality-equivalent comparison.", flush=True)
+        if args.profile != "hc-q8" and "STRATA_HEAD_HOST" in os.environ:
             print("Warning: your exported STRATA_HEAD_HOST forces the output head into RAM; "
                   "unset it to use the measured fast configuration.", flush=True)
     if args.no_prompt_cache:
         config["args"].extend(["--prompt-cache", "0"])
-    path = engine.parent / ("gtx1650-fast.json" if args.profile == "fast" else "gtx1650.json")
+    path = engine.parent / (f"gtx1650-{args.profile}.json" if args.profile != "stable" else "gtx1650.json")
     path.write_text(json.dumps(config, indent=2) + "\n", encoding="utf-8")
-    note = "Experimental:" if args.profile == "stable" else "Experimental fast profile:"
+    note = "Experimental:" if args.profile == "stable" else f"Experimental {args.profile} profile:"
     print(f"Config: {path}\n{note} weights in pinned RAM, 8K context, images off.", flush=True)
     if args.write_config_only:
         return 0
