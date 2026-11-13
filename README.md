@@ -80,7 +80,22 @@
 
 ## صور فعلية من المراقبة
 
-التُقطت الصورتان من السيرفر المحلي على [`http://127.0.0.1:8080/#monitor`](http://127.0.0.1:8080/#monitor) أثناء تشغيل إعداد `fast`، بتاريخ 13 نوفمبر 2026.
+لقطات فعلية من السيرفر المحلي على [`http://127.0.0.1:8080/#monitor`](http://127.0.0.1:8080/#monitor)، بتاريخ 13 نوفمبر 2026. صور البناء الثاني مرفقة أدناه، وصور البناء الأول محفوظة للمقارنة.
+
+### البناء الثاني — `cached` أثناء قراءة طلب
+
+![البناء الثاني بإعداد cached أثناء قراءة طلب فعلي، مع حمل GTX 1650 Ti ونشاط PCIe والذاكرة](docs/media/gtx1650/monitor-cached-active.png)
+
+### البناء الثاني — `cached` بعد اكتمال الطلبات
+
+![سجل طلبات البناء الثاني بإعداد cached، ويعرض توليد الشرح بالعربية والإنجليزية عند 6.4 توكن في الثانية في جلسة التشغيل الحية](docs/media/gtx1650/monitor-cached-requests.png)
+
+هذه اللقطات من **`cached` دون تكميم HC إضافي، وليست من `hc-q8`**. تظهر 6.4 توكن/ث لطلبي الشرح في هذه الجلسة، بينما وسيط جولات القياس المنشورة هو **6.3 توكن/ث**. لم تُعدّل الأرقام، ولم تتغير نتائج جدول الأداء. تخزين نقاط الاستعادة مفعّل هنا، والعدّادات لحظية أو متوسطات جلسة، وليست جولات قياس إضافية. [وقت الالتقاط والشروط والطلبات الفعلية](docs/media/gtx1650/README.md).
+
+<details>
+<summary>صور البناء الأول — إعداد fast، للمقارنة التاريخية</summary>
+
+التُقطت الصورتان التاليتان أثناء تشغيل `fast` في البناء الأول.
 
 ### أثناء قراءة طلب
 
@@ -95,6 +110,8 @@
 تظهر طلبات فعلية وسرعة التوليد واستهلاك الذاكرة. حالة `Max tokens` تعني أن الإجابة وصلت إلى حد 64 توكن المحدد للتجربة، لا أن الطلب فشل.
 
 > **الصور ليست جولات القياس الثلاث في الجدول.** إنها لقطات تشغيل عادي مع تخزين نقاط استعادة النص بإعداده الافتراضي، بينما عُطّل في مقارنة الأداء. العدّادات لحظية أو متوسطات جلسة، وقد تختلف عن وسيط القياسات. لم تُستبدل الأرقام الظاهرة بأرقام الجدول. [تفاصيل اللقطات](docs/media/gtx1650/README.md).
+
+</details>
 
 <a id="how-does-it-work"></a>
 
@@ -300,4 +317,4 @@ Experimental, unofficial Strata fork tested on **one Linux GTX 1650 Ti 4GB lapto
 
 The second pass adds `--profile cached`: pooled CUDA weight allocations and a 160 MiB exact-byte VRAM prefix cache. On the same new binary, three-round medians were **5.9 → 6.3 decode tokens/s**, with 8K context and int8 KV unchanged. A separate **precision-changing** `--profile hc-q8` reached **8.8 tokens/s**, but was slower at longer-prompt processing and is not a quality-equivalent comparison. Both passed one **8,169-input-token** recall request and small chat/JSON/code/tool checks. `stable` and `fast` configuration output remains byte-identical to the previous launcher.
 
-Build this fork from source; upstream installers do not include the patch. No weights or binaries are shipped. Screenshots show the earlier actual `fast` session, not the new benchmark medians. Long-running sessions, parallel load, other GPUs, operating systems and backends remain unvalidated. See the [English setup guide](docs/GTX1650.md), [first report](bench/results/2026-11-13-gtx1650ti-4gb-tuning/README.md) and [second report](bench/results/2026-11-13-gtx1650ti-4gb-pool-cache/README.md).
+Build this fork from source; upstream installers do not include the patch. No weights or binaries are shipped. Screenshots show actual live sessions from the first build (`fast`) and second build (`cached`), not benchmark medians. The new normal-session screenshots show 6.4 decode tokens/s; they do not replace the three-round 6.3 median. Long-running sessions, parallel load, other GPUs, operating systems and backends remain unvalidated. See the [English setup guide](docs/GTX1650.md), [first report](bench/results/2026-11-13-gtx1650ti-4gb-tuning/README.md) and [second report](bench/results/2026-11-13-gtx1650ti-4gb-pool-cache/README.md).

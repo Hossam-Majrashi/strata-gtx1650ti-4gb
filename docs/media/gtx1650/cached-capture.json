@@ -1,0 +1,43 @@
+{
+  "source_url": "http://127.0.0.1:8080/#monitor",
+  "profile": "cached",
+  "code_commit": "7e78ae524f7b1072dc7c26046825b3a6ea6e850b",
+  "engine_sha256": "87af0e9e62396beee1a694d5335cbd1cfd15ca4802f86d58454cdf6762ad20b3",
+  "health": {
+    "status": "ok",
+    "max_context": 8192,
+    "model": "qwen3.8-flash-next-iq3_xxs-gtx1650-cached",
+    "images": false,
+    "api_key": false,
+    "image_generation": false,
+    "loaded": true,
+    "service": "strata"
+  },
+  "browser": "Chrome/156.0.8078.79",
+  "headless": true,
+  "browser_gpu_rendering": false,
+  "device_scale_factor": 1,
+  "prompt_checkpointing": "normal default enabled",
+  "timestamp_basis": "PNG write time immediately after CDP Page.captureScreenshot",
+  "modifications": "none; only viewport sizing and the actual light/dark theme button",
+  "interpretation": "Live session counters, not new benchmark medians; no HC Q8 capture",
+  "requests_file": "cached-capture-requests.json",
+  "screenshots": [
+    {
+      "file": "monitor-cached-active.png",
+      "sha256": "7c3a84ef38c38b625bc5c349bf4d3cee2e1f5445c6f373afe4d55a5c6834f4c6",
+      "bytes": 114920,
+      "width": 1440,
+      "height": 1008,
+      "written_at": "2026-11-13T05:28:02.005096+03:00"
+    },
+    {
+      "file": "monitor-cached-requests.png",
+      "sha256": "a5232c4405e245553f4cfdec7d90efdd6f474acbaeb8db2af8b819a9648bff68",
+      "bytes": 142489,
+      "width": 1440,
+      "height": 1008,
+      "written_at": "2026-11-13T05:28:28.768865+03:00"
+    }
+  ]
+}

@@ -1,0 +1,182 @@
+{
+  "purpose": "Live screenshot demonstration, not extra benchmark rounds",
+  "health": {
+    "status": "ok",
+    "max_context": 8192,
+    "model": "qwen3.8-flash-next-iq3_xxs-gtx1650-cached",
+    "images": false,
+    "api_key": false,
+    "image_generation": false,
+    "loaded": true,
+    "service": "strata"
+  },
+  "checkpointing": "normal default enabled",
+  "completed_at": "2026-11-13T05:28:27.054473+03:00",
+  "requests": [
+    {
+      "case": "prefill",
+      "request": {
+        "model": "qwen3.8-flash-next-iq3_xxs-gtx1650-cached",
+        "messages": [
+          {
+            "role": "user",
+            "content": "Read this text carefully.\nThe small laptop runs a local language model. The small laptop runs a local language model. The small laptop runs a local language model. The small laptop runs a local language model. The small laptop runs a local language model. The small laptop runs a local language model. The small laptop runs a local language model. The small laptop runs a local language model. The small laptop runs a local language model. The small laptop runs a local language model. The small laptop runs a local language model. The small laptop runs a local language model. The small laptop runs a local language model. The small laptop runs a local language model. The small laptop runs a local language model. The small laptop runs a local language model. The small laptop runs a local language model. The small laptop runs a local language model. The small laptop runs a local language model. The small laptop runs a local language model. The small laptop runs a local language model. The small laptop runs a local language model. \nWhat is the capital of France? Reply with the city name only."
+          }
+        ],
+        "temperature": 0,
+        "max_tokens": 8,
+        "chat_template_kwargs": {
+          "enable_thinking": false
+        }
+      },
+      "response": {
+        "id": "chatcmpl-285750db8edb493f8ca152dd",
+        "object": "chat.completion",
+        "created": 1794536871,
+        "model": "qwen3.8-flash-next-iq3_xxs-gtx1650-cached",
+        "choices": [
+          {
+            "index": 0,
+            "message": {
+              "role": "assistant",
+              "content": "Paris"
+            },
+            "finish_reason": "stop"
+          }
+        ],
+        "usage": {
+          "prompt_tokens": 231,
+          "completion_tokens": 2,
+          "total_tokens": 233,
+          "prompt_tokens_details": {
+            "cached_tokens": 0
+          }
+        },
+        "timings": {
+          "cache_n": 0,
+          "prompt_n": 231,
+          "prompt_ms": 8162.8,
+          "prompt_per_token_ms": 35.337,
+          "prompt_per_second": 28.3,
+          "predicted_n": 2,
+          "predicted_ms": 322.7,
+          "predicted_per_token_ms": 161.35,
+          "predicted_per_second": 6.2,
+          "draft_n": 0,
+          "draft_n_accepted": 0
+        }
+      },
+      "wall_s": 8.488
+    },
+    {
+      "case": "english",
+      "request": {
+        "model": "qwen3.8-flash-next-iq3_xxs-gtx1650-cached",
+        "messages": [
+          {
+            "role": "user",
+            "content": "Explain how a CPU and a GPU work together to run a language model. Use clear English and keep writing until you have given at least six useful points."
+          }
+        ],
+        "temperature": 0,
+        "max_tokens": 64,
+        "chat_template_kwargs": {
+          "enable_thinking": false
+        }
+      },
+      "response": {
+        "id": "chatcmpl-ea8b622e5dce4546b9cb6fb1",
+        "object": "chat.completion",
+        "created": 1794536880,
+        "model": "qwen3.8-flash-next-iq3_xxs-gtx1650-cached",
+        "choices": [
+          {
+            "index": 0,
+            "message": {
+              "role": "assistant",
+              "content": "Here is an explanation of how a Central Processing Unit (CPU) and a Graphics Processing Unit (GPU) collaborate to run a language model, broken down into six key points:\n\n1. **Task Specialization and Division of Labor**\n   The CPU and GPU have fundamentally different architectures designed for different types of work."
+            },
+            "finish_reason": "length"
+          }
+        ],
+        "usage": {
+          "prompt_tokens": 44,
+          "completion_tokens": 64,
+          "total_tokens": 108,
+          "prompt_tokens_details": {
+            "cached_tokens": 0
+          }
+        },
+        "timings": {
+          "cache_n": 0,
+          "prompt_n": 44,
+          "prompt_ms": 3281.5,
+          "prompt_per_token_ms": 74.58,
+          "prompt_per_second": 13.4,
+          "predicted_n": 64,
+          "predicted_ms": 9991.0,
+          "predicted_per_token_ms": 156.109,
+          "predicted_per_second": 6.4,
+          "draft_n": 0,
+          "draft_n_accepted": 0
+        }
+      },
+      "wall_s": 13.275
+    },
+    {
+      "case": "arabic",
+      "request": {
+        "model": "qwen3.8-flash-next-iq3_xxs-gtx1650-cached",
+        "messages": [
+          {
+            "role": "user",
+            "content": "اشرح بالعربية كيف يعمل نموذج اللغة على الكمبيوتر، وما الفرق بين الرام وذاكرة كرت الشاشة. اكتب شرحًا مفيدًا في ست نقاط."
+          }
+        ],
+        "temperature": 0,
+        "max_tokens": 64,
+        "chat_template_kwargs": {
+          "enable_thinking": false
+        }
+      },
+      "response": {
+        "id": "chatcmpl-03430666d00e4ca1906a3353",
+        "object": "chat.completion",
+        "created": 1794536893,
+        "model": "qwen3.8-flash-next-iq3_xxs-gtx1650-cached",
+        "choices": [
+          {
+            "index": 0,
+            "message": {
+              "role": "assistant",
+              "content": "إليك شرح مبسط ومفيد في ست نقاط حول كيفية عمل نماذج اللغة على الكمبيوتر والفرق بين الذاكرة الرئيسية (RAM) وذاكرة كرت الشاشة (VRAM):\n\n1. **تمثيل النص كأرقام (Embeddings):** لا يفهم الكمبيوتر الكلمات كما نفهمها، بل يحول كل"
+            },
+            "finish_reason": "length"
+          }
+        ],
+        "usage": {
+          "prompt_tokens": 45,
+          "completion_tokens": 64,
+          "total_tokens": 109,
+          "prompt_tokens_details": {
+            "cached_tokens": 0
+          }
+        },
+        "timings": {
+          "cache_n": 0,
+          "prompt_n": 45,
+          "prompt_ms": 3279.6,
+          "prompt_per_token_ms": 72.88,
+          "prompt_per_second": 13.7,
+          "predicted_n": 64,
+          "predicted_ms": 10028.1,
+          "predicted_per_token_ms": 156.689,
+          "predicted_per_second": 6.4,
+          "draft_n": 0,
+          "draft_n_accepted": 0
+        }
+      },
+      "wall_s": 13.31
+    }
+  ]
+}
