@@ -1,0 +1,45 @@
+{
+  "date": "2026-11-13",
+  "status": "local exploratory tuning, not the standard benchmark protocol",
+  "engine_source": "13eedf552417a6a791a7d13c6597e24300ee3a09 plus the mapped-weight patch in 0d5c9aaefd747bdbb5b1cd616093c0822ad9b7f1",
+  "engine_version": "0.1.59.1",
+  "engine_sha256": "4fbe3ea2702acf9d937955b068f211ad8e2d9d7a25410255d21dc21bfbccd977",
+  "build": {
+    "type": "Release",
+    "STRATA_ENABLE_CUDA": "ON",
+    "CMAKE_CUDA_ARCHITECTURES": "75",
+    "STRATA_BUILD_TESTS": "ON",
+    "STRATA_PORTABLE": "ON",
+    "cuda_nvcc": "13.4.92",
+    "host_compiler": "GCC 16.2.1"
+  },
+  "hardware": {
+    "gpu": "NVIDIA GeForce GTX 1650 Ti",
+    "vram_mib": 4096,
+    "engine_visible_vram_mib": 3729,
+    "cpu": "Intel Core i5-10300H, 4 cores / 8 threads",
+    "system_ram_gib_approx": 62.6,
+    "pcie_max": "Gen3 x16; idle query reported Gen1 x16",
+    "storage": "NVMe SSD; not storage-benchmarked",
+    "os": "Linux 7.3.3-1-cachyos x86_64",
+    "nvidia_driver": "620.70.06",
+    "power_clock_changes": "none made for these experiments",
+    "background": "graphical desktop and coding-agent tools remained open; not an isolated benchmark host",
+    "paging": "system swap/zram was in use; about 4.1 GiB in use after testing, not attributed to an individual process"
+  },
+  "model": {
+    "repository": "ISTA-DASLab/Qwen3.8-Flash-Next-GSQ-RCO-GGUF",
+    "quantization": "IQ3_XXS",
+    "repository_revision": null,
+    "repository_revision_note": "not recorded for the already downloaded model",
+    "shards": [
+      {"name": "Qwen3.8-Flash-Next-GSQ-RCO-IQ3_XXS-00001-of-00002.gguf", "bytes": 47039860096},
+      {"name": "Qwen3.8-Flash-Next-GSQ-RCO-IQ3_XXS-00002-of-00002.gguf", "bytes": 28800138432}
+    ],
+    "full_gguf_sha256": null,
+    "full_gguf_sha256_note": "not measured",
+    "native_pack_index_sha256": "1afe12b36cd2d13bf122b741fa0e81e1f751319cc3c451e54ba75524d825f148",
+    "chat_template_sha256": "12827f24b742ea4e80cdc12dbcf9622227056b9f797252a3149263d4f9aaadce",
+    "expert_profile_sha256": "8f59b4aa8873209dff11c11e37bcda9529a1335b724a1afeea37bf6388975baf"
+  }
+}

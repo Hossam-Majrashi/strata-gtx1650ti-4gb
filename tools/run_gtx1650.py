@@ -14,6 +14,9 @@ def main():
     parser.add_argument("--data-dir", type=Path, required=True, help="prepared Strata data directory")
     parser.add_argument("--engine", type=Path, default=ROOT / "build-gtx1650" / "strata")
     parser.add_argument("--port", type=int, default=8080)
+    parser.add_argument("--profile", choices=("stable", "fast"), default="stable",
+                        help="stable: original small-VRAM settings; fast: opt-in measured tuning (needs more free VRAM)")
+    parser.add_argument("--no-prompt-cache", action="store_true", help="disable prompt checkpoints for fresh-prompt benchmarks")
     parser.add_argument("--write-config-only", action="store_true", help="write config without starting the server")
     args = parser.parse_args()
     data, engine = args.data_dir.expanduser().resolve(), args.engine.expanduser().resolve()
@@ -41,9 +44,23 @@ def main():
             "--conversation-cache-mib", "0", "--spec", "2",
         ],
     }
-    path = engine.parent / "gtx1650.json"
+    if args.profile == "fast":
+        # Keep the same GGUF bytes: no HC requantization or smaller KV/context.
+        config["env"].pop("STRATA_HEAD_HOST")
+        config["env"]["STRATA_SM75_PERF"] = "1"
+        config["args"][config["args"].index("--prefill") + 1] = "256"
+        config["args"].extend(["--short-read", "0"])
+        config["model_name"] += "-fast"
+        config["log"] = str(engine.parent / "gtx1650-fast.engine.log")
+        if "STRATA_HEAD_HOST" in os.environ:
+            print("Warning: your exported STRATA_HEAD_HOST forces the output head into RAM; "
+                  "unset it to use the measured fast configuration.", flush=True)
+    if args.no_prompt_cache:
+        config["args"].extend(["--prompt-cache", "0"])
+    path = engine.parent / ("gtx1650-fast.json" if args.profile == "fast" else "gtx1650.json")
     path.write_text(json.dumps(config, indent=2) + "\n", encoding="utf-8")
-    print(f"Config: {path}\nExperimental: weights in pinned RAM, 8K context, images off.", flush=True)
+    note = "Experimental:" if args.profile == "stable" else "Experimental fast profile:"
+    print(f"Config: {path}\n{note} weights in pinned RAM, 8K context, images off.", flush=True)
     if args.write_config_only:
         return 0
     os.chdir(ROOT)

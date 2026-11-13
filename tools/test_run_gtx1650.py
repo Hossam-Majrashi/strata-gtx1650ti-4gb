@@ -46,6 +46,19 @@ class LauncherTest(unittest.TestCase):
             self.assertNotIn("--mtp", config["args"])
             self.assertEqual(config["args"][config["args"].index("--prefill") + 1], "32")
             self.assertEqual(original.read_text(), "user config")
+            stable_bytes = (root / "gtx1650.json").read_bytes()
+            subprocess.run([sys.executable, str(SCRIPT), "--data-dir", str(root), "--engine", str(root / "strata"),
+                            "--profile", "fast", "--no-prompt-cache", "--write-config-only"], check=True, capture_output=True)
+            fast = json.loads((root / "gtx1650-fast.json").read_text())
+            self.assertEqual((root / "gtx1650.json").read_bytes(), stable_bytes)
+            self.assertEqual(fast["env"]["STRATA_SM75_PERF"], "1")
+            self.assertNotIn("STRATA_HEAD_HOST", fast["env"])
+            self.assertNotIn("STRATA_HC_Q8", fast["env"])
+            self.assertEqual(fast["args"][fast["args"].index("--prefill") + 1], "256")
+            self.assertEqual(fast["args"][fast["args"].index("--short-read") + 1], "0")
+            self.assertEqual(fast["args"][fast["args"].index("--max-context") + 1], "8192")
+            self.assertNotIn("--prompt-cache", config["args"])
+            self.assertEqual(fast["args"][fast["args"].index("--prompt-cache") + 1], "0")
 
 
 if __name__ == "__main__":

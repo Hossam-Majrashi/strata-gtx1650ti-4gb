@@ -1,236 +1,246 @@
-# Strata on GTX 1650 Ti — 4 GB VRAM
+# Strata — GTX 1650 Ti · 4GB VRAM
 
-**Experimental, unofficial fork of [Niko1221/Strata](https://github.com/Niko1221/Strata).**
-It adds opt-in mapped host storage for canonical weights, plus a small-VRAM launcher.
-Tested on one GTX 1650 Ti 4 GB laptop with 64 GB RAM and Linux, using an already prepared
-ISTA-DASLab Qwen3.8-Flash-Next IQ3_XXS pack.
+**تشغيل تجريبي محلي لـ Qwen3.8-Flash-Next على لابتوب بكرت GTX 1650 Ti بذاكرة 4GB.**
 
-**[Build, run, test results and limits → docs/GTX1650.md](docs/GTX1650.md)**
+هذه نسخة غير رسمية من [Niko1221/Strata](https://github.com/Niko1221/Strata)، تركّز على تجاوز ضيق ذاكرة الكرت وتحسين الأداء على جهاز اختُبر فعليًا، بدل نقل إعدادات كروت أكبر دون قياس.
 
-- Real local chat requests passed in English and Arabic, including `hi`.
-- The launcher uses 8K context, but a full 8K prompt and long-running sessions have **not** been tested.
-- Pictures and drafting are off. Reading weights over PCIe is slower; this is not a speed-optimized build.
-- No model weights or patched binaries are included. Build this fork from source; the upstream
-  installers linked below do **not** contain this patch. Existing app settings are not replaced.
-- Other cards, Windows, HIP, SYCL and Metal have not been validated for this change.
+> **4GB هنا هي ذاكرة الكرت، وليست RAM الجهاز.** الاختبارات أُجريت على Linux مع **64GB RAM** ومعالج **Intel Core i5-10300H**. لا تعني النتائج أن الموديل سيعمل على جهاز بذاكرة نظام صغيرة.
 
-**بالعربية:** نسخة تجريبية لكرت GTX 1650 Ti بذاكرة 4GB. نجح التشغيل على Linux مع رام 64GB.
-تحتاج بناء المحرك من المصدر وملفات الموديل المجهّزة مسبقًا؛ راجع الدليل أعلاه.
+[النتائج](#performance) · [صور التشغيل](#monitor-screenshots) · [البناء والتشغيل](#build-and-run) · [الحدود](#limits) · [الدليل بالإنجليزية](docs/GTX1650.md)
+
+## آخر التطورات — 13 نوفمبر 2026
+
+- **نجح تحميل الموديل وتشغيله على الكرت ذي 4GB:** أُضيف خيار `STRATA_WEIGHT_ARENA_HOST=1` لوضع ساحة الأوزان الأساسية في RAM مثبّتة، مع وصول الكرت إليها عبر PCIe.
+- **أُضيف إعداد `fast` اختياري:** يحتفظ برأس الإخراج في VRAM عندما يتّسع، ويفعّل تحسينات Turing الموجودة في المحرك، ويزيد دفعة قراءة النص من 32 إلى 256، ويستخدم المسار الدفعي للرسائل القصيرة.
+- **الإعداد الأصلي `stable` ما زال الافتراضي.** لكل إعداد ملف تشغيل وسجل منفصلان. لا يستبدل المشغّل إعدادات تطبيق Strata أو محركاته المثبتة.
+- **قياسات قابلة للمراجعة:** ثلاث جولات لكل إعداد، مع حفظ الطلبات والإجابات والأزمنة. جُرّبت إعدادات أخرى، ووُثّقت المحاولات الفاشلة والمرفوضة أيضًا.
+- **فحوص فعلية:** عربي، JSON، محادثة قصيرة، نداء أداة ثم استخدام نتيجتها، واسترجاع معلومة من طلب بطول **5,892 توكن**.
+
+لا يتضمن هذا المستودع أوزان الموديل أو محركًا مبنيًا مسبقًا. **مثبّتات المشروع الأصلي لا تحتوي تعديل هذه النسخة**؛ يلزم البناء من المصدر واستخدام ملفات موديل مجهّزة مسبقًا.
+
+<a id="performance"></a>
+
+## نتائج الأداء
+
+**نفس الموديل والمحرك، 3 جولات لكل إعداد، والتفكير معطّل:**
+
+| القياس | قبل | إعداد `fast` |
+| --- | ---: | ---: |
+| توليد الردود | 4.9 توكن/ث | **5.8 توكن/ث — أسرع بنحو 18%** |
+| قراءة نص الاختبار، 231 توكن | 14.4 توكن/ث | **35.6 توكن/ث — نحو 2.47×** |
+| الزمن الكامل لطلب النص نفسه | 16.41 ثانية | **6.83 ثانية** |
+| طلبات الشرح القصيرة | نحو 18 ثانية | **نحو 12.9 ثانية** |
+
+### ظروف القياس
+
+- **الجهاز:** NVIDIA GeForce GTX 1650 Ti 4GB، معالج i5-10300H، و64GB RAM.
+- **النظام:** Linux، تعريف NVIDIA `620.70.06`، وCUDA `13.4.92`.
+- **الموديل:** ISTA-DASLab Qwen3.8-Flash-Next GSQ-RCO **IQ3_XXS**، بنفس الملفين ونفس الحزمة المجهّزة.
+- **المحرك:** بناء محلي `0.1.59.1`، أساس الشفرة `13eedf55` مع تعديل الأوزان المعيّنة في RAM. لم يتغيّر ملف المحرك بين إعدادات مقارنة السرعة.
+- **الإعدادات المشتركة:** سياق 8,192 توكن، KV من نوع `int8`، ثلاثة عمّال CPU، دون صور أو موديل مسودة، وحرارة توليد `0`.
+- الأرقام هي **وسيط الجولات الثلاث**. أُوقف تخزين نقاط استعادة النص في ذراعي المقارنة بـ `--prompt-cache 0`؛ عدد توكنات النص المعاد استخدامها كان صفرًا.
+- قياس التوليد مأخوذ من طلبي شرح، أحدهما بالإنجليزية والآخر بالعربية، بحد **64 توكن للإجابة**. طلب 231 توكن أعاد `Paris` في توكنين، فلا يُستخدم وحده لتقييم التوليد المستمر.
+- زمن تحميل الموديل غير محسوب. **زمن أول توكن لم يُقَس**؛ الزمن الكامل يشمل الطلب حتى اكتمال الإجابة.
+
+هذه مقارنة إعدادات على جهاز واحد، وليست مقارنة مع إصدار رسمي أحدث أو ضمانًا لأداء كل المحادثات.
+
+**[التقرير الكامل: كل الجولات، الإعدادات، السجلات، والمحاولات المرفوضة](bench/results/2026-11-13-gtx1650ti-4gb-tuning/README.md)**
+
+<a id="monitor-screenshots"></a>
+
+## صور فعلية من المراقبة
+
+التُقطت الصورتان من السيرفر المحلي على [`http://127.0.0.1:8080/#monitor`](http://127.0.0.1:8080/#monitor) أثناء تشغيل إعداد `fast`، بتاريخ 13 نوفمبر 2026.
+
+### أثناء قراءة طلب
+
+![صفحة مراقبة Strata أثناء قراءة طلب على GTX 1650 Ti، وتعرض حمل الكرت والذاكرة والطاقة ونشاط PCIe](docs/media/gtx1650/monitor-fast-active.png)
+
+تظهر حالة القراءة، وكرت GTX 1650 Ti، واستخدام VRAM وRAM، ونشاط النقل عبر PCIe.
+
+### سجل الطلبات — الوضع الداكن
+
+![صفحة مراقبة Strata بالوضع الداكن، وتعرض الطلبات المكتملة وتوليد الردود عند 5.8 توكن في الثانية](docs/media/gtx1650/monitor-fast-requests.png)
+
+تظهر طلبات فعلية وسرعة التوليد واستهلاك الذاكرة. حالة `Max tokens` تعني أن الإجابة وصلت إلى حد 64 توكن المحدد للتجربة، لا أن الطلب فشل.
+
+> **الصور ليست جولات القياس الثلاث في الجدول.** إنها لقطات تشغيل عادي مع تخزين نقاط استعادة النص بإعداده الافتراضي، بينما عُطّل في مقارنة الأداء. العدّادات لحظية أو متوسطات جلسة، وقد تختلف عن وسيط القياسات. لم تُستبدل الأرقام الظاهرة بأرقام الجدول. [تفاصيل اللقطات](docs/media/gtx1650/README.md).
+
+<a id="how-does-it-work"></a>
+
+## ما الذي تغيّر تقنيًا؟
+
+### تجاوز ضيق VRAM
+
+في الاختبار الأصلي، لم يكفِ تقليل السياق وحده: الأوزان الأساسية والإسقاطات الأصلية استهلكت معظم VRAM قبل تخصيص حالة الجلسة.
+
+الخيار الجديد `STRATA_WEIGHT_ARENA_HOST=1` يستخدم RAM مثبّتة ومُعيّنة للكرت لتخزين ساحة الأوزان الأساسية. هذا التعديل **لا يعيد تكميم تلك الأوزان**، لكن قراءتها عبر PCIe لها تكلفة زمنية. تبقى الإسقاطات ومخازن العمل وذاكرة الخبراء بحاجة إلى VRAM.
+
+هذا المسار مخصص **لكرت CUDA منفصل واحد**، وهو معطّل ما لم تُضبط القيمة على `1`. ليس دعمًا عامًا لكل كروت GTX أو لكل الخلفيات.
+
+### الفرق بين الإعدادين
+
+| الخاصية | `stable` — الافتراضي | `fast` — اختياري |
+| --- | --- | --- |
+| ساحة الأوزان الأساسية | RAM مثبّتة ومُعيّنة للكرت | نفسها |
+| رأس الإخراج | يُفرض وضعه في RAM | يبقى على الكرت عندما يتّسع، مع إمكانية رجوع المحرك إلى RAM عند فشل التخصيص |
+| تحسينات Turing | لا يفعّلها المشغّل صراحةً | `STRATA_SM75_PERF=1` |
+| دفعة قراءة النص | 32 | 256 |
+| الرسائل القصيرة | السلوك الأصلي للمحرك | المسار الدفعي عبر `--short-read 0` |
+| السياق / KV | 8K / `int8` | 8K / `int8` |
+| VRAM الفارغة بعد التحميل في الاختبار | 744MiB | 256MiB |
+| ملف الإعداد | `gtx1650.json` | `gtx1650-fast.json` |
+| سجل المحرك | `gtx1650.engine.log` | `gtx1650-fast.engine.log` |
+
+قيم الذاكرة لقطات بعد التحميل، وليست ذروة الاستهلاك. إذا كان الكرت مشغولًا ببرامج أخرى ولم يتّسع `fast`، ارجع إلى `stable`.
+
+لم يُفعّل `fast` تكميم HC إضافيًا، ولم يُقلّل السياق أو يغيّر دقة KV مقارنةً بـ `stable`. **هذا لا يثبت تطابق الإجابات بتًا ببت**؛ مسار قراءة النص وترتيب الحسابات يختلفان، وسياسات المحرك الأصلية لتجاوز بعض الخبراء ومشاركة CPU لم تتغيّر.
+
+<a id="build-and-run"></a>
+
+## البناء والتشغيل
+
+هذه خطوات المسار الذي اختُبر على **Linux**. تحتاج إلى Git، وPython مع اعتماديات السيرفر، ومترجم C++ متوافق، وCMake وNinja، وCUDA Toolkit يدعم `sm_75`.
+
+### 1. تجهيز نسخة المصدر
+
+```sh
+git clone https://github.com/Hossam-Majrashi/strata-gtx1650ti-4gb.git
+cd strata-gtx1650ti-4gb
+
+python3 -m venv .venv
+.venv/bin/python -m pip install -r requirements.txt -r requirements-build.txt
+```
+
+تثبيت الاعتماديات وأول تهيئة للبناء قد يحتاجان الإنترنت. هذه الخطوات لا تطلب تنزيل أوزان موديل جديد. إن كانت لديك بيئة Python جاهزة باعتماديات سيرفر Strata، يمكنك استخدامها بدل إنشاء بيئة أخرى.
+
+### 2. بناء المحرك المعدّل
+
+```sh
+cmake -S . -B build-gtx1650 -G Ninja \
+  -DCMAKE_BUILD_TYPE=Release \
+  -DSTRATA_ENABLE_CUDA=ON \
+  -DCMAKE_CUDA_ARCHITECTURES=75 \
+  -DSTRATA_BUILD_TESTS=ON \
+  -DSTRATA_PORTABLE=ON
+
+cmake --build build-gtx1650 --target strata mapped_weight_arena_test -j3
+```
+
+### 3. استخدام ملفاتك المجهّزة مسبقًا
+
+يتوقع المشغّل بنية البيانات التالية:
+
+```text
+/path/to/Strata-data/
+├── packs/
+│   └── iq3_xxs/                  # الحزمة الأصلية المجهّزة، وليست مجلدًا فارغًا
+└── models/
+    └── IQ3_XXS/
+        ├── Qwen3.8-Flash-Next-GSQ-RCO-IQ3_XXS-00001-of-00002.gguf
+        └── Qwen3.8-Flash-Next-GSQ-RCO-IQ3_XXS-00002-of-00002.gguf
+```
+
+**المشغّل لا ينزّل الموديل ولا يحوّل GGUF إلى حزمة.** إذا كانت الملفات غير موجودة، يتوقف برسالة توضح الناقص. المسار `/path/to/Strata-data` مثال؛ استبدله بمجلد بياناتك الحقيقي.
+
+### 4. تشغيل الموديل
+
+الإعداد الأصلي، الأنسب للبدء إذا كانت VRAM المتاحة محدودة:
+
+```sh
+.venv/bin/python tools/run_gtx1650.py \
+  --data-dir /path/to/Strata-data --profile stable
+```
+
+الإعداد الأسرع المقاس على الجهاز المذكور:
+
+```sh
+.venv/bin/python tools/run_gtx1650.py \
+  --data-dir /path/to/Strata-data --profile fast
+```
+
+- المحادثة: **<http://127.0.0.1:8080/>**
+- المراقبة: **<http://127.0.0.1:8080/#monitor>**
+- فحص التحميل: **<http://127.0.0.1:8080/health>** — انتظر `loaded: true`.
+- الإيقاف: `Ctrl+C` في تيرمنال السيرفر، قبل تشغيل إعداد آخر على المنفذ نفسه.
+- منفذ بديل: `--port 18080`.
+- إنشاء ملف الإعداد دون تشغيل: `--write-config-only`.
+- اختيار محرك آخر: `--engine /path/to/strata`؛ يجب أن يكون مبنيًا **بالتعديل نفسه**.
+
+إذا كنت قد صدّرت `STRATA_HEAD_HOST` في بيئة الطرفية، ألغِه قبل تجربة وضع الرأس على الكرت؛ وجوده يفرض وضع الرأس في RAM، والمشغّل ينبه إلى ذلك. حافظ على الربط المحلي ما لم تكن تحتاج وصولًا من أجهزة أخرى.
+
+## الاتصال عبر API
+
+مثال طلب محلي بعد تشغيل `fast`:
+
+```sh
+curl http://127.0.0.1:8080/v1/chat/completions \
+  -H 'Content-Type: application/json' \
+  -d '{
+    "model": "qwen3.8-flash-next-iq3_xxs-gtx1650-fast",
+    "messages": [{"role": "user", "content": "ما عاصمة السعودية؟"}],
+    "temperature": 0,
+    "max_tokens": 64,
+    "chat_template_kwargs": {"enable_thinking": false}
+  }'
+```
+
+اختُبر هنا مسار Chat Completions، بما فيه نداء أداة وقراءة نتيجتها. لا تعني هذه الفحوص اعتماد كل تطبيق أو كل سيناريو أدوات. [تفاصيل واجهات Strata](docs/AI_REFERENCE.md).
+
+## إعادة القياس والاختبارات
+
+للمقارنة بنصوص جديدة دون الاستفادة من تخزين نقاط الاستعادة، شغّل أحد الإعدادين مع `--no-prompt-cache`:
+
+```sh
+.venv/bin/python tools/run_gtx1650.py \
+  --data-dir /path/to/Strata-data --profile fast --no-prompt-cache
+```
+
+ثم من تيرمنال ثانٍ:
+
+```sh
+python3 tools/bench_gtx1650.py \
+  --label fast --rounds 3 --out /tmp/gtx-fast.jsonl
+```
+
+للمقارنة، أوقف السيرفر وشغّل `stable` مع الخيار نفسه، ثم استخدم `--label stable --out /tmp/gtx-stable.jsonl`. الأداة لا تبدأ السيرفر أو توقفه، وترفض الكتابة فوق ملف نتائج موجود. تحفظ الطلبات والإجابات والأخطاء، ولا تقيس زمن أول توكن. **اترك `--no-prompt-cache` خارج أمر التشغيل للمحادثة العادية.**
+
+فحوص الإعداد وأداة القياس وذاكرة CUDA:
+
+```sh
+python3 tools/test_run_gtx1650.py
+python3 tools/test_bench_gtx1650.py
+ctest --test-dir build-gtx1650 -R '^mapped_weight_arena_test$' --output-on-failure
+```
+
+نجحت اختبارات Python الأربعة واختبار CUDA على الجهاز المذكور. فحص CUDA يتحقق من عنونة الذاكرة وقراءتها، لا من جودة الموديل.
+
+<a id="limits"></a>
+
+## الحدود وما لم يُختبر
+
+- **جهاز واحد فقط:** GTX 1650 Ti 4GB، و64GB RAM، وLinux. لا يوجد اعتماد لكرت GTX 1650 غير Ti أو لبقية فئة GTX، ولا دليل هنا على أن RAM أقل تكفي.
+- **السياق مضبوط على 8K، لكن لم يُختبر طلب كامل بطول 8K.** نجح اختبار استرجاع واحد بطول 5,892 توكن؛ ليس تقييم جودة سياق طويل شاملًا.
+- لم يُختبر تشغيل لساعات، أو طلبات متوازية، أو صور، أو Windows، أو HIP، أو SYCL، أو Metal لهذا التعديل.
+- الصور وموديلات المسودة DFlash2/MTP غير مفعّلة في إعداد التشغيل المقبول. الزيادة في السرعة لا تأتي من تنزيل موديل آخر.
+- جُرّب HC Q8 مع سياق 4K، ووصل في جولة واحدة إلى **9.1 توكن/ث** للإنجليزية، لكنه ترك **60MiB فقط** فارغة وغيّر دقة الأوزان والسياق. **استُبعد ولم يُضف كخيار تشغيل.** كما فشلت محاولتا تحميل أخريان مع HC Q8؛ التفاصيل محفوظة في التقرير.
+- نجحت ستة فحوص قصيرة على `fast`: حساب بسيط، عربي، JSON مضبوط، `hi`، نداء أداة، ثم استهلاك نتيجة الأداة. لا تثبت هذه الفحوص عدم تراجع الجودة العامة أو جودة البرمجة.
+- قراءة الأوزان عبر PCIe ما زالت قيدًا على السرعة. النتائج تخص هذا الجهاز وهذه الطلبات، ولا تعد بأداء مماثل على كل كرت 4GB.
+
+## المراجع والفضل
+
+- **المشروع الأصلي والمحرك والواجهة:** [Niko1221/Strata](https://github.com/Niko1221/Strata). هذه نسخة تجريبية غير رسمية، وليست إصدارًا معتمدًا من المشروع الأصلي. [README الأصلي](https://github.com/Niko1221/Strata/blob/main/README.md).
+- **دليل التعديل:** [docs/GTX1650.md](docs/GTX1650.md).
+- **سجل التجارب الكامل:** [تقرير تحسين GTX 1650 Ti](bench/results/2026-11-13-gtx1650ti-4gb-tuning/README.md)، مع بيانات كل جولة وبيانات البناء والحدود.
+- **أمثلة مجتمعية روجعت:** [Righteous-AI/Strata-Recipes](https://github.com/Righteous-AI/Strata-Recipes) و[ExTV/strata-5090-4070](https://github.com/ExTV/strata-5090-4070). أجهزتها مختلفة؛ لم تُنقل أرقام أدائها أو تُطبّق سلسلة ترقيعاتها هنا بوصفها إثباتًا لدعم 4GB.
+- **أدلة إضافية:** [البناء من المصدر](docs/SOURCE_INSTALL.md) · [مرجع النماذج والواجهات](docs/AI_REFERENCE.md) · [المساهمة](CONTRIBUTING.md).
+
+الشفرة تحت [رخصة MIT](LICENSE). تراخيص الموديلات والاعتماديات مستقلة؛ لا تتضمن هذه النسخة أوزان موديل. [الفضل وتراخيص الموديلات](docs/HOW_IT_WORKS.md#credits).
 
 ---
 
-The original upstream README follows. Its general compatibility claims are not validation of this fork.
+### English summary
 
-<p align="center">
-  <picture>
-    <source media="(prefers-color-scheme: dark)" srcset="apps/host/public/brand/strata-lockup-dark.svg">
-    <img src="apps/host/public/brand/strata-lockup-light.svg" alt="Strata" width="340">
-  </picture>
-</p>
+Experimental, unofficial Strata fork tested on **one Linux GTX 1650 Ti 4GB laptop with 64GB system RAM**, using an already prepared ISTA-DASLab Qwen3.8-Flash-Next IQ3_XXS pack. Opt-in mapped host weights make loading possible on this tested setup. The optional `--profile fast` measured **4.9 → 5.8 decode tokens/s** and **14.4 → 35.6 prompt tokens/s** on a fresh 231-token input, with three rounds per configuration and thinking off. The original profile remains the default.
 
-<h3 align="center">Run powerful AI on your own computer.</h3>
-<p align="center">Chat, code and work with images, locally.</p>
-
-<p align="center">
-  <a href="#models">Models</a> · <a href="#install"><b>Install</b></a> ·
-  <a href="#hardware">Hardware</a> · <a href="#tools">Tools</a> ·
-  <a href="#help">Help</a> · <a href="#support-strata">Support</a>
-</p>
-
-<p align="center">
-  <a href="https://github.com/Niko1221/Strata/releases/latest"><img src="https://img.shields.io/github/v/release/Niko1221/Strata?label=download&color=0ab887" alt="Download Strata"></a>
-  <a href="LICENSE"><img src="https://img.shields.io/github/license/Niko1221/Strata" alt="MIT license"></a>
-  <a href="https://github.com/sponsors/Niko1221"><img src="https://img.shields.io/badge/Sponsor-EA4AAA?logo=githubsponsors&logoColor=fff" alt="Sponsor Strata on GitHub Sponsors"></a>
-  <a href="https://buymeacoffee.com/strataengine"><img src="https://img.shields.io/badge/Buy_me_a_coffee-FFDD00?logo=buymeacoffee&logoColor=000" alt="Support Strata on Buy Me a Coffee"></a>
-</p>
-
-<p align="center"><sub><b>English</b> · <a href="README.zh-CN.md">简体中文</a> · <a href="README.ja.md">日本語</a> · <a href="README.de.md">Deutsch</a> · <a href="README.fr.md">Français</a> · <a href="README.es.md">Español</a> · <a href="README.pt-BR.md">Português</a> · <a href="README.pl.md">Polski</a></sub></p>
-
-**Free, open source, and yours to run.** Use Strata on your desktop or with your favorite coding tools. No account needed.
-
-## Models
-
-We recommend **ISTA-DASLab first**, then **Unsloth** and other providers, where a compatible model fits.
-
-<details>
-<summary><img src="docs/media/models/qwen.svg" width="22" alt="" align="middle"> &nbsp;<b>Qwen3.8-Flash-Next</b></summary>
-
-| Provider | Choices |
-| --- | --- |
-| **ISTA-DASLab · recommended** | Q2\_0, IQ2\_XS, IQ3\_XXS, IQ3\_S. [Coder: IQ1\_M](docs/MODELS.md#coder) for coding. |
-| **Unsloth** | UD-IQ4\_XS, UD-Q4\_K\_XL, UD-Q5\_K\_XL, UD-Q6\_K\_XL, Q8\_0 |
-| **Gyro · agentionai** | [Gyro-S, Gyro-M](https://huggingface.co/agentionai/Qwen3.8-Flash-Next-Gyro-GGUF). Lower memory use but slower. |
-| **Other options** | [Swift 1.5](docs/MODELS.md#swift-15), [NVFP4](docs/NVFP4.md), [OrcaRouter](docs/ORCA.md) |
-
-[Compare sizes, memory needs and compatibility](docs/MODELS.md).
-
-</details>
-
-<details>
-<summary><img src="docs/media/models/qwen.svg" width="22" alt="" align="middle"> &nbsp;<b>Qwen3.6-35B-A3B</b></summary>
-
-**Unsloth:** UD-Q4_K_XL, UD-Q6_K_XL, Q8_0. These are the currently documented packs for this model.
-
-[Model guide and compatibility](docs/QWEN36.md).
-
-</details>
-
-<details>
-<summary><img src="docs/media/models/deepseek.svg" width="22" alt="" align="middle"> &nbsp;<b>DeepSeekV4.1-Flash-1017</b></summary>
-
-In the **desktop app** and the **Terminal**. What does not fit in memory is read from your SSD, so it needs a lot of free
-disk space.
-
-| Set (ISTA-DAS) | Download | Free disk needed |
-| --- | ---: | ---: |
-| 1.75 bpw | 239 GB | about 245 GB |
-| 2.00 bpw | 257 GB | about 265 GB |
-| 2.25 bpw | 274 GB | about 280 GB |
-| ISTA-DAS Coder (half of the experts removed) | 191 GB | about 197 GB |
-
-Runs on NVIDIA RTX 30, 40 and 50 series (Windows and Linux), AMD Radeon AI PRO R9700 (Linux), AMD Ryzen AI Max — Strix Halo
-(Windows), and Apple Silicon Macs with 64 GB or more ([Mac](docs/DEEPSEEK_MAC.md)). Setup downloads the files and the DeepSeek engine, then starts the model.
-
-```sh
-strata launch --family deepseek41 --model ist-das-2.00bpw --plan
-```
-
-Measured with the 2.00 bpw set on Strata 0.2.5 (Strix Halo: 0.2.7). Output is the speed of the answer, prompt is how fast Strata reads your input.
-
-| Hardware | Output | Prompt |
-| --- | ---: | ---: |
-| RTX 5070 12 GB, 64 GB RAM | 4 to 6 tokens/s | about 110 tokens/s (4K) |
-| RTX 3060 12 GB, 46 GB RAM | 9 to 11 tokens/s | about 155 tokens/s (4K) |
-| 1x Radeon AI PRO R9700, 251 GB RAM | 21 to 25 tokens/s | 320 to 360 tokens/s (8K) |
-| 4x Radeon AI PRO R9700 | 74 to 77 tokens/s | 400 to 450 tokens/s (8K) |
-| Ryzen AI Max+ 395 (Strix Halo), 128 GB unified | 19 to 21 tokens/s (code), 11 (chat) | 87 tokens/s (4K), 125 tokens/s (8K) |
-
-[Memory, disk and details](docs/DEEPSEEK41.md) · [Release notes](https://github.com/Niko1221/Strata/releases)
-
-</details>
-
-<a id="the-other-sizes"></a>
-
-Not sure what fits? [Choose a model for your computer](docs/MODELS.md#pick-by-memory).
-
-## Install
-
-<a id="option-a-the-strata-app"></a>
-
-### Desktop app
-
-**[Download Strata for Windows, Linux or Mac →](https://github.com/Niko1221/Strata/releases/latest)**
-
-Install the app, choose a model, and start chatting. There is one installer for each system. On first start the app
-downloads the engine for your graphics card. [Help with the installer](docs/INSTALL.md#the-app).
-
-<sub>Files: `Strata-0.2.13-windows-x64-setup.exe` · `Strata-0.2.13-linux-x86_64.AppImage` · `Strata-0.2.13-macos-arm64.dmg`</sub>
-
-<p align="center">
-  <img src="docs/media/app-chat.png" width="900" alt="Strata desktop app with a chat and live code preview side by side">
-  <br><sub>Chat, files and a live preview in one window.</sub>
-</p>
-
-<a id="option-b-the-terminal-one-line"></a>
-
-### Terminal app
-
-Prefer the terminal? Install Strata, then run **`strata launch`**.
-
-<details open>
-<summary><b>Install commands</b></summary>
-
-**Linux / Mac**
-
-```sh
-curl -fsSL --connect-timeout 15 --max-time 120 https://github.com/Niko1221/Strata/releases/latest/download/install.sh -o install.sh && sh install.sh
-```
-
-**Windows PowerShell**
-
-```powershell
-irm -TimeoutSec 120 https://github.com/Niko1221/Strata/releases/latest/download/install.ps1 | iex
-```
-
-On Windows, open a new terminal afterwards. Then:
-
-```sh
-strata launch
-```
-
-Follow the prompts to download and start a model. [Terminal guide](docs/TERMINAL_LAUNCH.md).
-
-</details>
-
-<p align="center">
-  <img src="docs/media/terminal-monitor.png" width="900" alt="Strata terminal app showing model activity, speed, memory and recent requests">
-  <br><sub>Watch your model and hardware while it runs.</sub>
-</p>
-
-<a id="build-from-source"></a>
-
-[Build from source](docs/SOURCE_INSTALL.md) · [Docker](docs/DOCKER.md) · [Full install guide](docs/INSTALL.md)
-
-<a id="what-you-need"></a>
-
-## Hardware
-
-| Supported hardware | Guide |
-| --- | --- |
-| **NVIDIA GeForce RTX 20 / 30 / 40 / 50 series** | [NVIDIA setup](docs/INSTALL.md#what-you-need) |
-| **AMD Radeon RX 7700 / 7800 / 7900, RX 9060 / 9070, AI PRO R9700** | [AMD setup](docs/AMD_HIP.md) |
-| **AMD Radeon RX 6800 / 6900 · experimental** | [RX 6000 setup](docs/AMD_HIP.md#rdna2-gfx1030) |
-| **Intel Arc · Linux** | [Intel setup](docs/INTEL_ARC.md) |
-| **Apple Silicon · M1 or newer** | [Mac setup](docs/MAC.md) |
-| **AMD Ryzen AI Max · Strix Halo** | [Strix Halo setup](docs/STRIX_HALO.md) |
-| **NVIDIA DGX Spark · Linux** | [DGX Spark setup](docs/DGX_SPARK_LINUX.md) |
-
-<a id="using-it"></a>
-
-## Tools
-
-**Claude Code · Codex CLI · OpenCode · oh-my-pi · pi.dev · Hermes Agent · OpenClaw**, and more through the OpenAI- and Anthropic-compatible APIs.
-
-Run **`strata connect`** to see setup instructions for your tool. [Connection guide](docs/TERMINAL_LAUNCH.md#connect-your-apps-strata-connect).
-
-<a id="guides"></a>
-<a id="how-fast-is-it"></a>
-<a id="how-does-it-work"></a>
-<a id="something-went-wrong"></a>
-
-## Help
-
-[All guides](docs) · [Troubleshooting](docs/TROUBLESHOOTING.md) · [Report a bug](https://github.com/Niko1221/Strata/issues/new/choose) ·
-[Benchmarks](docs/COMMUNITY_BENCHMARKS.md) · [How it works](docs/HOW_IT_WORKS.md) · [Contribute](CONTRIBUTING.md)
-
-## Support Strata
-
-**Help keep local AI open to everyone.** A GitHub sponsorship or a coffee helps fund development and testing on more hardware.
-
-<a href="https://github.com/sponsors/Niko1221"><img src="https://img.shields.io/badge/Sponsor_on_GitHub-EA4AAA?style=for-the-badge&logo=githubsponsors&logoColor=white" alt="GitHub Sponsors: sponsor Strata" height="48"></a>
-<a href="https://buymeacoffee.com/strataengine"><img src="https://cdn.buymeacoffee.com/buttons/v2/default-yellow.png" alt="Buy Me a Coffee: support Strata" height="48"></a>
-
-### Loyal supporters
-
-Thank you to everyone who supports Strata.
-
-<!-- supporters:start (one line per public supporter, newest last; copy a line and change the GitHub name in all four places) -->
-<a href="https://github.com/ryan4yin"><img src="https://github.com/ryan4yin.png?size=96" width="48" height="48" alt="ryan4yin" title="ryan4yin"></a>
-<a href="https://github.com/themactep"><img src="https://github.com/themactep.png?size=96" width="48" height="48" alt="themactep" title="themactep"></a>
-<a href="https://github.com/macintog"><img src="https://github.com/macintog.png?size=96" width="48" height="48" alt="macintog" title="macintog"></a>
-<a href="https://github.com/bisonbet"><img src="https://github.com/bisonbet.png?size=96" width="48" height="48" alt="bisonbet" title="bisonbet"></a>
-<a href="https://github.com/vizv"><img src="https://github.com/vizv.png?size=96" width="48" height="48" alt="vizv" title="vizv"></a>
-<a href="https://github.com/kod88vn"><img src="https://github.com/kod88vn.png?size=96" width="48" height="48" alt="kod88vn" title="kod88vn"></a>
-<a href="https://github.com/seoulworker"><img src="https://github.com/seoulworker.png?size=96" width="48" height="48" alt="seoulworker" title="seoulworker"></a>
-<a href="https://github.com/jackyini"><img src="https://github.com/jackyini.png?size=96" width="48" height="48" alt="jackyini" title="jackyini"></a>
-<a href="https://github.com/router0mail"><img src="https://github.com/router0mail.png?size=96" width="48" height="48" alt="router0mail" title="router0mail"></a>
-<!-- supporters:end -->
-
-[MIT license](LICENSE) · [Credits and model licenses](docs/HOW_IT_WORKS.md#credits) · [Privacy](docs/SAFETY.md)
-
-<a id="option-c-let-your-ai-set-it-up"></a>
-
-<sub>For AI tools and automated readers: <a href="AGENTS.md">technical reference</a> · <a href="docs/AI_SETUP.md">setup instructions</a>.</sub>
-
-**Sponsorships, hardware partnerships or collaborations:** [niko.veit@outlook.com](mailto:niko.veit@outlook.com).
-
+Build this fork from source; upstream installers do not include the patch. No weights or binaries are shipped. Screenshots show actual local monitoring, not the benchmark medians. Full 8K input, long-running sessions, other GPUs, operating systems and backends are unvalidated. See the [English setup guide](docs/GTX1650.md) and [full measurement report](bench/results/2026-11-13-gtx1650ti-4gb-tuning/README.md).

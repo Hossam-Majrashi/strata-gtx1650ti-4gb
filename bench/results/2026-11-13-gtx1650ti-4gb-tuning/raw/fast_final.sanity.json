@@ -1,0 +1,411 @@
+[
+  {
+    "case": "arithmetic",
+    "request": {
+      "model": "qwen3.8-flash-next-iq3_xxs-gtx1650-fast",
+      "messages": [
+        {
+          "role": "user",
+          "content": "What is 17 + 25? Reply with the number only."
+        }
+      ],
+      "temperature": 0,
+      "max_tokens": 48,
+      "chat_template_kwargs": {
+        "enable_thinking": false
+      }
+    },
+    "expected": "42",
+    "passed": true,
+    "wall_s": 2.414,
+    "response": {
+      "id": "chatcmpl-533b197ccc7643368f35f10c",
+      "object": "chat.completion",
+      "created": 1794528685,
+      "model": "qwen3.8-flash-next-iq3_xxs-gtx1650-fast",
+      "choices": [
+        {
+          "index": 0,
+          "message": {
+            "role": "assistant",
+            "content": "42"
+          },
+          "finish_reason": "stop"
+        }
+      ],
+      "usage": {
+        "prompt_tokens": 28,
+        "completion_tokens": 3,
+        "total_tokens": 31,
+        "prompt_tokens_details": {
+          "cached_tokens": 0
+        }
+      },
+      "timings": {
+        "cache_n": 0,
+        "prompt_n": 28,
+        "prompt_ms": 1882.7,
+        "prompt_per_token_ms": 67.239,
+        "prompt_per_second": 14.9,
+        "predicted_n": 3,
+        "predicted_ms": 517.4,
+        "predicted_per_token_ms": 172.467,
+        "predicted_per_second": 5.8,
+        "draft_n": 0,
+        "draft_n_accepted": 0
+      }
+    }
+  },
+  {
+    "case": "arabic",
+    "request": {
+      "model": "qwen3.8-flash-next-iq3_xxs-gtx1650-fast",
+      "messages": [
+        {
+          "role": "user",
+          "content": "ما عاصمة السعودية؟ أجب بالعربية بجملة قصيرة."
+        }
+      ],
+      "temperature": 0,
+      "max_tokens": 48,
+      "chat_template_kwargs": {
+        "enable_thinking": false
+      }
+    },
+    "expected": "الرياض",
+    "passed": true,
+    "wall_s": 3.207,
+    "response": {
+      "id": "chatcmpl-3e57c7ba59da4208bdf93022",
+      "object": "chat.completion",
+      "created": 1794528687,
+      "model": "qwen3.8-flash-next-iq3_xxs-gtx1650-fast",
+      "choices": [
+        {
+          "index": 0,
+          "message": {
+            "role": "assistant",
+            "content": "عاصمة المملكة العربية السعودية هي الرياض."
+          },
+          "finish_reason": "stop"
+        }
+      ],
+      "usage": {
+        "prompt_tokens": 26,
+        "completion_tokens": 9,
+        "total_tokens": 35,
+        "prompt_tokens_details": {
+          "cached_tokens": 0
+        }
+      },
+      "timings": {
+        "cache_n": 0,
+        "prompt_n": 26,
+        "prompt_ms": 1664.2,
+        "prompt_per_token_ms": 64.008,
+        "prompt_per_second": 15.6,
+        "predicted_n": 9,
+        "predicted_ms": 1541.4,
+        "predicted_per_token_ms": 171.267,
+        "predicted_per_second": 5.8,
+        "draft_n": 0,
+        "draft_n_accepted": 0
+      }
+    }
+  },
+  {
+    "case": "json",
+    "request": {
+      "model": "qwen3.8-flash-next-iq3_xxs-gtx1650-fast",
+      "messages": [
+        {
+          "role": "user",
+          "content": "Return only a JSON object with the keys name and count. Set name to apple and count to 3. No markdown."
+        }
+      ],
+      "temperature": 0,
+      "max_tokens": 48,
+      "chat_template_kwargs": {
+        "enable_thinking": false
+      }
+    },
+    "expected": "json",
+    "passed": true,
+    "wall_s": 4.058,
+    "response": {
+      "id": "chatcmpl-66959efd4d354e6daa6f8bfd",
+      "object": "chat.completion",
+      "created": 1794528690,
+      "model": "qwen3.8-flash-next-iq3_xxs-gtx1650-fast",
+      "choices": [
+        {
+          "index": 0,
+          "message": {
+            "role": "assistant",
+            "content": "{\"name\": \"apple\", \"count\": 3}"
+          },
+          "finish_reason": "stop"
+        }
+      ],
+      "usage": {
+        "prompt_tokens": 37,
+        "completion_tokens": 13,
+        "total_tokens": 50,
+        "prompt_tokens_details": {
+          "cached_tokens": 0
+        }
+      },
+      "timings": {
+        "cache_n": 0,
+        "prompt_n": 37,
+        "prompt_ms": 1817.3,
+        "prompt_per_token_ms": 49.116,
+        "prompt_per_second": 20.4,
+        "predicted_n": 13,
+        "predicted_ms": 2239.0,
+        "predicted_per_token_ms": 172.231,
+        "predicted_per_second": 5.8,
+        "draft_n": 0,
+        "draft_n_accepted": 0
+      }
+    }
+  },
+  {
+    "case": "hi",
+    "request": {
+      "model": "qwen3.8-flash-next-iq3_xxs-gtx1650-fast",
+      "messages": [
+        {
+          "role": "user",
+          "content": "hi"
+        }
+      ],
+      "temperature": 0,
+      "max_tokens": 48,
+      "chat_template_kwargs": {
+        "enable_thinking": false
+      }
+    },
+    "expected": "greeting",
+    "passed": true,
+    "wall_s": 3.37,
+    "response": {
+      "id": "chatcmpl-8ea7c8b98f854677a6699a27",
+      "object": "chat.completion",
+      "created": 1794528694,
+      "model": "qwen3.8-flash-next-iq3_xxs-gtx1650-fast",
+      "choices": [
+        {
+          "index": 0,
+          "message": {
+            "role": "assistant",
+            "content": "Hi there! How can I help you today?"
+          },
+          "finish_reason": "stop"
+        }
+      ],
+      "usage": {
+        "prompt_tokens": 13,
+        "completion_tokens": 11,
+        "total_tokens": 24,
+        "prompt_tokens_details": {
+          "cached_tokens": 0
+        }
+      },
+      "timings": {
+        "cache_n": 0,
+        "prompt_n": 13,
+        "prompt_ms": 1482.9,
+        "prompt_per_token_ms": 114.069,
+        "prompt_per_second": 8.8,
+        "predicted_n": 11,
+        "predicted_ms": 1885.4,
+        "predicted_per_token_ms": 171.4,
+        "predicted_per_second": 5.8,
+        "draft_n": 0,
+        "draft_n_accepted": 0
+      }
+    }
+  },
+  {
+    "case": "tool_call",
+    "request": {
+      "model": "qwen3.8-flash-next-iq3_xxs-gtx1650-fast",
+      "messages": [
+        {
+          "role": "user",
+          "content": "Use get_weather to check the weather in Riyadh, Saudi Arabia."
+        }
+      ],
+      "tools": [
+        {
+          "type": "function",
+          "function": {
+            "name": "get_weather",
+            "description": "Get the current weather for a city.",
+            "parameters": {
+              "type": "object",
+              "properties": {
+                "city": {
+                  "type": "string"
+                }
+              },
+              "required": [
+                "city"
+              ]
+            }
+          }
+        }
+      ],
+      "temperature": 0,
+      "max_tokens": 96,
+      "chat_template_kwargs": {
+        "enable_thinking": false
+      }
+    },
+    "passed": true,
+    "wall_s": 13.891,
+    "response": {
+      "id": "chatcmpl-c4da7a57710e4d8d992f8681",
+      "object": "chat.completion",
+      "created": 1794528698,
+      "model": "qwen3.8-flash-next-iq3_xxs-gtx1650-fast",
+      "choices": [
+        {
+          "index": 0,
+          "message": {
+            "role": "assistant",
+            "content": null,
+            "tool_calls": [
+              {
+                "id": "call_5d776ae28c62474381b8a072",
+                "type": "function",
+                "function": {
+                  "name": "get_weather",
+                  "arguments": "{\"city\":\"Riyadh, Saudi Arabia\"}"
+                }
+              }
+            ]
+          },
+          "finish_reason": "tool_calls"
+        }
+      ],
+      "usage": {
+        "prompt_tokens": 275,
+        "completion_tokens": 31,
+        "total_tokens": 306,
+        "prompt_tokens_details": {
+          "cached_tokens": 0
+        }
+      },
+      "timings": {
+        "cache_n": 0,
+        "prompt_n": 275,
+        "prompt_ms": 8564.0,
+        "prompt_per_token_ms": 31.142,
+        "prompt_per_second": 32.1,
+        "predicted_n": 31,
+        "predicted_ms": 5324.3,
+        "predicted_per_token_ms": 171.752,
+        "predicted_per_second": 5.8,
+        "draft_n": 0,
+        "draft_n_accepted": 0
+      }
+    }
+  },
+  {
+    "case": "tool_result",
+    "request": {
+      "model": "qwen3.8-flash-next-iq3_xxs-gtx1650-fast",
+      "messages": [
+        {
+          "role": "user",
+          "content": "Use get_weather to check the weather in Riyadh, Saudi Arabia."
+        },
+        {
+          "role": "assistant",
+          "content": null,
+          "tool_calls": [
+            {
+              "id": "call_5d776ae28c62474381b8a072",
+              "type": "function",
+              "function": {
+                "name": "get_weather",
+                "arguments": "{\"city\":\"Riyadh, Saudi Arabia\"}"
+              }
+            }
+          ]
+        },
+        {
+          "role": "tool",
+          "tool_call_id": "call_5d776ae28c62474381b8a072",
+          "content": "{\"city\":\"Riyadh\",\"temperature_c\":35,\"condition\":\"sunny\"}"
+        }
+      ],
+      "tools": [
+        {
+          "type": "function",
+          "function": {
+            "name": "get_weather",
+            "description": "Get the current weather for a city.",
+            "parameters": {
+              "type": "object",
+              "properties": {
+                "city": {
+                  "type": "string"
+                }
+              },
+              "required": [
+                "city"
+              ]
+            }
+          }
+        }
+      ],
+      "temperature": 0,
+      "max_tokens": 48,
+      "chat_template_kwargs": {
+        "enable_thinking": false
+      }
+    },
+    "passed": true,
+    "wall_s": 14.088,
+    "response": {
+      "id": "chatcmpl-74bb090a57d24739bbdaba74",
+      "object": "chat.completion",
+      "created": 1794528726,
+      "model": "qwen3.8-flash-next-iq3_xxs-gtx1650-fast",
+      "choices": [
+        {
+          "index": 0,
+          "message": {
+            "role": "assistant",
+            "content": "The current weather in Riyadh, Saudi Arabia is sunny with a temperature of 35°C."
+          },
+          "finish_reason": "stop"
+        }
+      ],
+      "usage": {
+        "prompt_tokens": 341,
+        "completion_tokens": 20,
+        "total_tokens": 361,
+        "prompt_tokens_details": {
+          "cached_tokens": 0
+        }
+      },
+      "timings": {
+        "cache_n": 0,
+        "prompt_n": 341,
+        "prompt_ms": 10653.7,
+        "prompt_per_token_ms": 31.243,
+        "prompt_per_second": 32.0,
+        "predicted_n": 20,
+        "predicted_ms": 3420.5,
+        "predicted_per_token_ms": 171.025,
+        "predicted_per_second": 5.8,
+        "draft_n": 0,
+        "draft_n_accepted": 0
+      }
+    }
+  }
+]
