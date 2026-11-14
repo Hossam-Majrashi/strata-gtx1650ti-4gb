@@ -1,0 +1,72 @@
+{
+  "schema": 1,
+  "base_revision": "e65fa94ffd15c3ce6d5487c6ddf95f46de5b01c6",
+  "date": "2026-11-14",
+  "engine_version": "0.1.59.1",
+  "final_engine_sha256": "9a8fb68360b29f46c6a5e028f64d160440c0fdfeb18c5dd2846fbade0ae5c117",
+  "previous_engine_sha256": "87af0e9e62396beee1a694d5335cbd1cfd15ca4802f86d58454cdf6762ad20b3",
+  "source_hashes": {
+    "src/program/generate.cpp": "5e8b0795863263eee46e37b72944e1656b8214d33c141092e9abcfd6b225f349",
+    "tools/run_gtx1650.py": "39017b8fdff0c97da331d22660dde870d6941dabc7d065064fbcb0fab3dc0c9c",
+    "tools/bench_gtx1650.py": "ba255fcbe8039343233f1d26b0c402e62f0f42e2813ad256094509db2f12e3c0",
+    "tools/test_run_gtx1650.py": "8cf091c6a17c5b0dd02d187b8616505d317782d08fe041a8cf9d6eb0fe2d6eab"
+  },
+  "build": {
+    "CMAKE_BUILD_TYPE:STRING": "Release",
+    "CMAKE_CUDA_ARCHITECTURES:UNINITIALIZED": "75",
+    "CMAKE_CUDA_COMPILER:FILEPATH": "/opt/cuda/bin/nvcc",
+    "CMAKE_CXX_COMPILER:FILEPATH": "/usr/bin/c++",
+    "STRATA_BUILD_TESTS:BOOL": "ON",
+    "STRATA_ENABLE_CUDA:BOOL": "ON",
+    "STRATA_PORTABLE:BOOL": "ON"
+  },
+  "system": "Linux 7.3.4-1-cachyos #1 SMP PREEMPT_DYNAMIC Fri, 13 Nov 2026 19:45:18 +0000 x86_64 GNU/Linux",
+  "gpu": "NVIDIA GeForce GTX 1650 Ti, 4096 MiB (3729 MiB CUDA visible), driver 620.70.06",
+  "cpu": "Intel Core i5-10300H, 4 cores / 8 threads",
+  "ram": "64 GB installed; about 62.6 GiB usable",
+  "toolkit": "CUDA 13.4.92, GCC 16.2.1",
+  "model": {
+    "family": "Qwen3.8-Flash-Next",
+    "pack": "ISTA-DASLab GSQ-RCO IQ3_XXS",
+    "source_revision": "not re-verified in this pass",
+    "download_markers_not_recomputed": {
+      "Qwen3.8-Flash-Next-GSQ-RCO-IQ3_XXS-00001-of-00002.gguf.done": "sha256 219ea929900dfa9ef091f3aa473fdba6874b65fcb36526d7d851ac9e95856d15",
+      "Qwen3.8-Flash-Next-GSQ-RCO-IQ3_XXS-00002-of-00002.gguf.done": "sha256 316b46f3a2dbd68c900f43136ab9449f9dcc3725dfd8c794847c204bc161e113"
+    },
+    "pack_hashes": {
+      "dense.bin": "d2af3d8331e5c7a1985d1d589747230f9d56719a6d33c7cddc9ee6b81cde6b13",
+      "index.txt": "1afe12b36cd2d13bf122b741fa0e81e1f751319cc3c451e54ba75524d825f148",
+      "expert-profile.bin": "8f59b4aa8873209dff11c11e37bcda9529a1335b724a1afeea37bf6388975baf"
+    },
+    "full_gguf_hashes_recomputed": false
+  },
+  "method": {
+    "rounds_per_headline_arm": 3,
+    "warmup_discarded": false,
+    "thinking": false,
+    "temperature": 0,
+    "prompt_cache": 0,
+    "arm_order": [
+      "baseline_verified",
+      "decode_verified"
+    ],
+    "randomized": false,
+    "interleaved": false,
+    "ttft_in_headline": false
+  },
+  "external_readme_references": [
+    {
+      "repository": "Captain-Tripps/flash-next-dual-gtx-1070",
+      "revision": "d2f3baca1774a326fd61a95297ffc055b0edb171",
+      "read": "README.md",
+      "used_for": "configuration/memory placement ideas only; no code copied or third-party benchmark reproduced"
+    },
+    {
+      "repository": "liaoyangr8-ai/wzy-flash-serve",
+      "revision": "10513b156abc94bcd8ad2948b7da5362e83720c4",
+      "read": "README.md",
+      "used_for": "configuration/memory placement ideas only; no code copied or third-party benchmark reproduced"
+    }
+  ],
+  "exploratory_limits": "The working executable was relinked during exploration; no per-trial binary hashes were saved. Baseline, pooled-prefill prototype and window-only prototypes are not mixed into headline medians. Only *_verified contribute to headline medians; these and the final parity/live/guard checks use the frozen final binary. The allocator prototype was discarded. No clock/power settings were changed."
+}

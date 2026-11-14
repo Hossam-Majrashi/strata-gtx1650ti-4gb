@@ -1,0 +1,7 @@
+[
+ {"name":"pool_host128","env":{"STRATA_PREFILL_POOL":"1","STRATA_PF_ALLOC_TRACE":"1","STRATA_TRACE":"1"}},
+ {"name":"pool_gpu128","env":{"STRATA_HEAD_HOST":null,"STRATA_PREFILL_POOL":"1","STRATA_PF_GROUP_SCRATCH":"1","STRATA_PF_HC_REGION":"1","STRATA_TRACE":"1"}},
+ {"name":"pool_gpu32","env":{"STRATA_HEAD_HOST":null,"STRATA_PREFILL_POOL":"1","STRATA_PF_GROUP_SCRATCH":"1","STRATA_PF_HC_REGION":"1","STRATA_TRACE":"1"},"flags":{"--prefill":"32"}},
+ {"name":"pool_gpu64","env":{"STRATA_HEAD_HOST":null,"STRATA_PREFILL_POOL":"1","STRATA_PF_GROUP_SCRATCH":"1","STRATA_PF_HC_REGION":"1","STRATA_TRACE":"1"},"flags":{"--prefill":"64"}},
+ {"name":"pool_host_cache160","env":{"STRATA_PREFILL_POOL":"1","STRATA_WEIGHT_CACHE_MIB":"160"}}
+]

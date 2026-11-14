@@ -1,0 +1,58 @@
+[
+  {
+    "profile": "stable",
+    "no_prompt_cache": false,
+    "config_identical": true,
+    "stdout_identical": true,
+    "stderr_identical": true
+  },
+  {
+    "profile": "stable",
+    "no_prompt_cache": true,
+    "config_identical": true,
+    "stdout_identical": true,
+    "stderr_identical": true
+  },
+  {
+    "profile": "fast",
+    "no_prompt_cache": false,
+    "config_identical": true,
+    "stdout_identical": true,
+    "stderr_identical": true
+  },
+  {
+    "profile": "fast",
+    "no_prompt_cache": true,
+    "config_identical": true,
+    "stdout_identical": true,
+    "stderr_identical": true
+  },
+  {
+    "profile": "cached",
+    "no_prompt_cache": false,
+    "config_identical": true,
+    "stdout_identical": true,
+    "stderr_identical": true
+  },
+  {
+    "profile": "cached",
+    "no_prompt_cache": true,
+    "config_identical": true,
+    "stdout_identical": true,
+    "stderr_identical": true
+  },
+  {
+    "profile": "hc-q8",
+    "no_prompt_cache": false,
+    "config_identical": true,
+    "stdout_identical": true,
+    "stderr_identical": true
+  },
+  {
+    "profile": "hc-q8",
+    "no_prompt_cache": true,
+    "config_identical": true,
+    "stdout_identical": true,
+    "stderr_identical": true
+  }
+]

@@ -1,0 +1,52 @@
+[
+  {
+    "name": "decode_gpu_r2",
+    "env": {
+      "STRATA_HEAD_HOST": null,
+      "STRATA_DECODE_ONLY_PROMPT": "1",
+      "STRATA_TRACE": "1"
+    },
+    "flags": {
+      "--short-read": "8192",
+      "--vram-reserve-mib": "128"
+    }
+  },
+  {
+    "name": "decode_gpu_cache160_r2",
+    "env": {
+      "STRATA_HEAD_HOST": null,
+      "STRATA_DECODE_ONLY_PROMPT": "1",
+      "STRATA_WEIGHT_CACHE_MIB": "160",
+      "STRATA_TRACE": "1"
+    },
+    "flags": {
+      "--short-read": "8192",
+      "--vram-reserve-mib": "128"
+    }
+  },
+  {
+    "name": "decode_gpu_cache96_r2",
+    "env": {
+      "STRATA_HEAD_HOST": null,
+      "STRATA_DECODE_ONLY_PROMPT": "1",
+      "STRATA_WEIGHT_CACHE_MIB": "96",
+      "STRATA_TRACE": "1"
+    },
+    "flags": {
+      "--short-read": "8192",
+      "--vram-reserve-mib": "128"
+    }
+  },
+  {
+    "name": "decode_cached_exact_r2",
+    "profile": "cached",
+    "env": {
+      "STRATA_DECODE_ONLY_PROMPT": "1",
+      "STRATA_TRACE": "1"
+    },
+    "flags": {
+      "--short-read": "8192",
+      "--vram-reserve-mib": "128"
+    }
+  }
+]

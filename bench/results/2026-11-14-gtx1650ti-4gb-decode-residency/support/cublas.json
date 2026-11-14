@@ -1,0 +1,4 @@
+[
+ {"name":"cublas_zero_gpu","env":{"STRATA_HEAD_HOST":null,"CUBLAS_WORKSPACE_CONFIG":":0:0","STRATA_TRACE":"1","STRATA_PF_ALLOC_TRACE":"1","STRATA_PF_GROUP_SCRATCH":"1","STRATA_PF_HC_REGION":"1"},"flags":{"--prefill":"64"}},
+ {"name":"cublas_small_gpu","env":{"STRATA_HEAD_HOST":null,"CUBLAS_WORKSPACE_CONFIG":":16:8","STRATA_TRACE":"1","STRATA_PF_ALLOC_TRACE":"1","STRATA_PF_GROUP_SCRATCH":"1","STRATA_PF_HC_REGION":"1"},"flags":{"--prefill":"64"}}
+]

@@ -1,0 +1,13 @@
+Test project $REPO/build-gtx1650
+    Start  48: native_dense_ple_key_test
+1/4 Test  #48: native_dense_ple_key_test ..........   Passed    0.51 sec
+    Start 287: mapped_weight_arena_test
+2/4 Test #287: mapped_weight_arena_test ...........   Passed    0.34 sec
+    Start 288: mapped_weight_cache_test
+3/4 Test #288: mapped_weight_cache_test ...........   Passed    0.24 sec
+    Start 289: native_dense_ple_key_test_pooled
+4/4 Test #289: native_dense_ple_key_test_pooled ...   Passed    0.23 sec
+
+100% tests passed out of 4
+
+Total Test time (real) =   1.34 sec

@@ -1,0 +1,8 @@
+[
+ {"name":"gpuhead_pf32","env":{"STRATA_HEAD_HOST":null,"STRATA_TRACE":"1"},"flags":{"--prefill":"32"}},
+ {"name":"gpuhead_compact128","env":{"STRATA_HEAD_HOST":null,"STRATA_PF_GROUP_SCRATCH":"1","STRATA_PF_HC_REGION":"1","STRATA_TRACE":"1"}},
+ {"name":"gpuhead_compact64","env":{"STRATA_HEAD_HOST":null,"STRATA_PF_GROUP_SCRATCH":"1","STRATA_PF_HC_REGION":"1","STRATA_TRACE":"1"},"flags":{"--prefill":"64"}},
+ {"name":"gpuhead_compact32","env":{"STRATA_HEAD_HOST":null,"STRATA_PF_GROUP_SCRATCH":"1","STRATA_PF_HC_REGION":"1","STRATA_TRACE":"1"},"flags":{"--prefill":"32"}},
+ {"name":"hcq8_pcie60","flags":{"--pcie-frac":"0.6"}},
+ {"name":"hcq8_pcie20","flags":{"--pcie-frac":"0.2"}}
+]

@@ -1,0 +1,17 @@
+[
+  {
+    "name": "baseline_final",
+    "profile": "hc-q8",
+    "rounds": 3
+  },
+  {
+    "name": "decode_final",
+    "profile": "hc-q8-decode",
+    "rounds": 3
+  },
+  {
+    "name": "baseline_recheck",
+    "profile": "hc-q8",
+    "rounds": 1
+  }
+]

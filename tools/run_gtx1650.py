@@ -14,9 +14,10 @@ def main():
     parser.add_argument("--data-dir", type=Path, required=True, help="prepared Strata data directory")
     parser.add_argument("--engine", type=Path, default=ROOT / "build-gtx1650" / "strata")
     parser.add_argument("--port", type=int, default=8080)
-    parser.add_argument("--profile", choices=("stable", "fast", "cached", "hc-q8"), default="stable",
+    parser.add_argument("--profile", choices=("stable", "fast", "cached", "hc-q8", "hc-q8-decode"), default="stable",
                         help="stable: original; fast: first tuning; cached: exact-byte VRAM prefix cache; "
-                             "hc-q8: EXPERIMENTAL HC requantization (changes precision)")
+                             "hc-q8: EXPERIMENTAL HC requantization; hc-q8-decode: same HC precision, "
+                             "GPU head and window-only prompt reading (slower long prompts)")
     parser.add_argument("--no-prompt-cache", action="store_true", help="disable prompt checkpoints for fresh-prompt benchmarks")
     parser.add_argument("--write-config-only", action="store_true", help="write config without starting the server")
     args = parser.parse_args()
@@ -55,12 +56,23 @@ def main():
         config["log"] = str(engine.parent / f"gtx1650-{args.profile}.engine.log")
         if args.profile == "cached":
             config["env"].update({"STRATA_NATIVE_POOL": "1", "STRATA_WEIGHT_CACHE_MIB": "160"})
-        elif args.profile == "hc-q8":
+        elif args.profile in ("hc-q8", "hc-q8-decode"):
             config["env"].update({"STRATA_NATIVE_POOL": "1", "STRATA_HC_Q8": "1", "STRATA_HEAD_HOST": "1"})
             config["args"][config["args"].index("--prefill") + 1] = "128"
             config["args"][config["args"].index("--expert-cache") + 1] = "8"
             print("EXPERIMENTAL hc-q8: changes HC weight precision; not a quality-equivalent comparison.", flush=True)
-        if args.profile != "hc-q8" and "STRATA_HEAD_HOST" in os.environ:
+            if args.profile == "hc-q8-decode":
+                if "STRATA_HEAD_HOST" in os.environ:
+                    parser.error("hc-q8-decode needs the GPU head; unset STRATA_HEAD_HOST first")
+                config["env"].pop("STRATA_HEAD_HOST")
+                config["env"].update({"STRATA_DECODE_ONLY_PROMPT": "1", "STRATA_WEIGHT_CACHE_MIB": "160",
+                                       "STRATA_HEAD_HOST_OFF": "1"})
+                config["args"][config["args"].index("--short-read") + 1] = "8192"
+                config["args"][config["args"].index("--vram-reserve-mib") + 1] = "128"
+                config["args"].extend(["--pcie-frac", "0.5"])
+                print("Decode-focused: no batched prompt buffers; long prompts can be slower. "
+                      "VRAM margin is small; use hc-q8 if this profile cannot fit.", flush=True)
+        if args.profile not in ("hc-q8", "hc-q8-decode") and "STRATA_HEAD_HOST" in os.environ:
             print("Warning: your exported STRATA_HEAD_HOST forces the output head into RAM; "
                   "unset it to use the measured fast configuration.", flush=True)
     if args.no_prompt_cache:

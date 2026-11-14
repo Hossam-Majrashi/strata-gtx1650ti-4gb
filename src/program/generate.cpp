@@ -10750,6 +10750,27 @@ int main(int argc, char** argv) {
         return false;
     };
     if (o.serve) {
+        // Opt-in, memory-limited text chat: read every prompt through the existing verify
+        // windows. No batched prompt buffers or cuBLAS handle are created. This trades
+        // prompt speed for residency (not quantization); long prompts may be much slower.
+        const char* decode_prompt_env = std::getenv("STRATA_DECODE_ONLY_PROMPT");
+        const bool decode_only_prompt = decode_prompt_env && std::strcmp(decode_prompt_env, "1") == 0;
+        if (decode_only_prompt) {
+#if defined(STRATA_USE_HIP) || defined(STRATA_HIP_GFX906) || defined(STRATA_GPU_METAL)
+            std::fprintf(stderr, "strata serve: STRATA_DECODE_ONLY_PROMPT=1 is experimental CUDA only\n");
+            return 2;
+#endif
+            if (!spill_discrete_gpu() || multi_gpu || o.batch != 0 || o.vision || !o.mtp.empty() || o.draft == "dflash2" ||
+                !o.no_prefill_borrow || o.short_read < o.max_context || o.peer_device >= 0 ||
+                drive.d.remote_count > 0 || o.pipeline_windows > 0 ||
+                std::getenv("STRATA_CKPT_REREAD") || std::getenv("STRATA_PIPELINE_SWITCH")) {
+                std::fprintf(stderr, "strata serve: STRATA_DECODE_ONLY_PROMPT=1 needs one discrete GPU, text only, no batch/drafter/peer/pipeline, "
+                                     "--no-prefill-borrow and --short-read at least --max-context; checkpoint reread and pipeline switches are unsupported\n");
+                return 2;
+            }
+            std::fprintf(stderr, "strata serve: STRATA_DECODE_ONLY_PROMPT=1: text prompts use verify windows; "
+                                 "no batched prompt buffers (long prompts can be slower)\n");
+        }
         if (o.spec < 2 || o.prefill_chunk <= 0 ||
             (graph_hits && (thits.d_res == nullptr || host_res.empty()))) {
             std::fprintf(stderr, "strata serve: needs --spec T and --prefill CHUNK (and a fillable "
@@ -11406,7 +11427,7 @@ int main(int argc, char** argv) {
             }
         }
         mem_mark("before the prompt path init");
-        for (;;) {
+        for (; !decode_only_prompt;) {
             const int r = init_prompt_paths();
             if (r == 0) break;
             int64_t next = 0;
@@ -17323,6 +17344,10 @@ int main(int argc, char** argv) {
                 }
             };
             auto read_part = [&](int64_t a0, int64_t b0, std::string& e) -> bool {
+                if (decode_only_prompt) {
+                    e = "this request needs the batched prompt path, disabled by STRATA_DECODE_ONLY_PROMPT=1; restart without it";
+                    return false;
+                }
                 // --prefill-pipe on a layer split: the segment's chunk is planned ONCE, on its whole length (or taken
                 // from the read it goes on from: resume_plan), and every run of it reads in that chunk (force_chunk) -
                 // the same chunks whether it is read in one run, in pieces beside decoding slots, or goes on after a

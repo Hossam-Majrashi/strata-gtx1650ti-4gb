@@ -1,0 +1,4 @@
+[
+ {"name":"baseline_verified","engine":"strata-residency-final","profile":"hc-q8","rounds":3},
+ {"name":"decode_verified","engine":"strata-residency-final","profile":"hc-q8-decode","rounds":3,"sanity":true}
+]

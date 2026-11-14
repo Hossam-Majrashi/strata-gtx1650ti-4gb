@@ -1,5 +1,6 @@
 """Launcher config checks; no GPU, downloads or model weights required."""
 import json
+import os
 from pathlib import Path
 import subprocess
 import sys
@@ -60,7 +61,7 @@ class LauncherTest(unittest.TestCase):
             self.assertNotIn("--prompt-cache", config["args"])
             self.assertEqual(fast["args"][fast["args"].index("--prompt-cache") + 1], "0")
             fast_bytes = (root / "gtx1650-fast.json").read_bytes()
-            for profile in ("cached", "hc-q8"):
+            for profile in ("cached", "hc-q8", "hc-q8-decode"):
                 with self.subTest(profile=profile):
                     result = subprocess.run([sys.executable, str(SCRIPT), "--data-dir", str(root),
                                              "--engine", str(root / "strata"), "--profile", profile,
@@ -76,13 +77,32 @@ class LauncherTest(unittest.TestCase):
                         self.assertNotIn("STRATA_HEAD_HOST", extra["env"])
                     else:
                         self.assertEqual(extra["env"]["STRATA_HC_Q8"], "1")
-                        self.assertEqual(extra["env"]["STRATA_HEAD_HOST"], "1")
                         self.assertEqual(extra["args"][extra["args"].index("--prefill") + 1], "128")
                         self.assertEqual(extra["args"][extra["args"].index("--expert-cache") + 1], "8")
                         self.assertIn("changes HC weight precision", result.stdout)
+                        if profile == "hc-q8":
+                            self.assertEqual(extra["env"]["STRATA_HEAD_HOST"], "1")
+                            self.assertNotIn("STRATA_DECODE_ONLY_PROMPT", extra["env"])
+                        else:
+                            self.assertNotIn("STRATA_HEAD_HOST", extra["env"])
+                            self.assertEqual(extra["env"]["STRATA_HEAD_HOST_OFF"], "1")
+                            self.assertEqual(extra["env"]["STRATA_DECODE_ONLY_PROMPT"], "1")
+                            self.assertEqual(extra["env"]["STRATA_WEIGHT_CACHE_MIB"], "160")
+                            self.assertEqual(extra["args"][extra["args"].index("--short-read") + 1], "8192")
+                            self.assertEqual(extra["args"][extra["args"].index("--vram-reserve-mib") + 1], "128")
+                            self.assertEqual(extra["args"][extra["args"].index("--pcie-frac") + 1], "0.5")
+                            self.assertIn("long prompts can be slower", result.stdout)
             self.assertEqual((root / "gtx1650.json").read_bytes(), stable_bytes)
             self.assertEqual((root / "gtx1650-fast.json").read_bytes(), fast_bytes)
             self.assertEqual(original.read_text(), "user config")
+            decode_bytes = (root / "gtx1650-hc-q8-decode.json").read_bytes()
+            rejected = subprocess.run([sys.executable, str(SCRIPT), "--data-dir", str(root),
+                                       "--engine", str(root / "strata"), "--profile", "hc-q8-decode",
+                                       "--write-config-only"], env={**os.environ, "STRATA_HEAD_HOST": "1"},
+                                      capture_output=True, text=True)
+            self.assertNotEqual(rejected.returncode, 0)
+            self.assertIn("unset STRATA_HEAD_HOST", rejected.stderr)
+            self.assertEqual((root / "gtx1650-hc-q8-decode.json").read_bytes(), decode_bytes)
 
 
 if __name__ == "__main__":

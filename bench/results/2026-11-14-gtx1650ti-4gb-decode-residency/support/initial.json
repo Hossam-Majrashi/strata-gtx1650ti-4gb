@@ -1,0 +1,8 @@
+[
+ {"name":"hcq8_baseline","rounds":3},
+ {"name":"hcq8_timed","env":{"STRATA_DECODE_TIMING":"1","STRATA_VERIFY_PROFILE":"1"}},
+ {"name":"hcq8_gpu_head","env":{"STRATA_HEAD_HOST":null}},
+ {"name":"hcq8_cache160","env":{"STRATA_WEIGHT_CACHE_MIB":"160"}},
+ {"name":"hcq8_pcie80","flags":{"--pcie-frac":"0.8"}},
+ {"name":"hcq8_pcie100","flags":{"--pcie-frac":"1"}}
+]

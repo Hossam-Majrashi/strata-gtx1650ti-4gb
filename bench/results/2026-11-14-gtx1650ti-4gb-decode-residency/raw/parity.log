@@ -1,0 +1,29 @@
+parity_old {'role': 'assistant', 'content': 'Here is an explanation of how a CPU and a GPU collaborate to run a language model, broken down into six key points:\n\n1. **Task Specialization (Orchestration vs. Computation)**\n   The Central Processing Unit (CPU) acts as the general-purpose manager or orchestrator. It handles complex control'}
+parity_disabled {'role': 'assistant', 'content': 'Here is an explanation of how a CPU and a GPU collaborate to run a language model, broken down into six key points:\n\n1. **Task Specialization (Orchestration vs. Computation)**\n   The Central Processing Unit (CPU) acts as the general-purpose manager or orchestrator. It handles complex control'}
+parity_enabled {'role': 'assistant', 'content': 'Here is an explanation of how a CPU and a GPU collaborate to run a language model, broken down into six key points:\n\n1. **Task Specialization (Orchestration vs. Computation)**\n   The Central Processing Unit (CPU) acts as the general-purpose manager or orchestrator. It handles complex control'}
+{
+  "fixture": "one 44-token English prompt, 64-token greedy continuation; identical window-only reads in every arm",
+  "head": "host in all arms, to isolate buffer allocation",
+  "adaptation": "off; fixed PCIe 0.5; prompt reuse off; CPU prefill share off",
+  "output_messages_identical": true,
+  "prompt_logprob_bytes_identical": true,
+  "prompt_logprob_rows": [
+    43,
+    43,
+    43
+  ],
+  "runs": [
+    {
+      "label": "parity_old",
+      "engine_sha256": "87af0e9e62396beee1a694d5335cbd1cfd15ca4802f86d58454cdf6762ad20b3"
+    },
+    {
+      "label": "parity_disabled",
+      "engine_sha256": "9a8fb68360b29f46c6a5e028f64d160440c0fdfeb18c5dd2846fbade0ae5c117"
+    },
+    {
+      "label": "parity_enabled",
+      "engine_sha256": "9a8fb68360b29f46c6a5e028f64d160440c0fdfeb18c5dd2846fbade0ae5c117"
+    }
+  ]
+}

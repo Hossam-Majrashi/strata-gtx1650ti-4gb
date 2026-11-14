@@ -1,0 +1,80 @@
+diff --git a/src/prefill/prefill.cpp b/src/prefill/prefill.cpp
+index e3f3ded6..e871235f 100644
+--- a/src/prefill/prefill.cpp
++++ b/src/prefill/prefill.cpp
+@@ -5,6 +5,7 @@
+ #include "strata/prefill/timer_marks.hpp"
+ #include "strata/prefill/mmq_ids_margin.hpp"
+ #include "strata/core/run_manifest.hpp"
++#include "strata/core/cuda_weight_alloc.hpp"
+ #include "strata/artifact/gguf_reader.hpp"
+ #include "strata/prefill/pf_fused_override.hpp"
+ #if defined(STRATA_HAVE_DFLASH2)
+@@ -669,5 +670,12 @@ inline void pf_mark(const char* what, int64_t& last, uint64_t asked_bytes = 0) {
+-// Either cudaMalloc (owned, freed with the object) or a bump allocation from a borrowed region; with no base and
+-// no region it only counts, which is how `bytes_needed` sizes the region.
++// Opt-in only: owned prompt buffers can share CUDA pool pages instead of each consuming
++// a separate cudaMalloc page. Allocations finish before nonblocking streams or graphs use them.
++bool prefill_pool() {
++    static const bool on = [] { const char* v = std::getenv("STRATA_PREFILL_POOL"); return v && std::strcmp(v, "1") == 0; }();
++    return on;
++}
++
++// Either cudaMalloc (owned, freed with the object), opt-in pooled storage, or a bump allocation
++// from a borrowed region; with no base and no region it only counts (`bytes_needed`).
+ struct Alloc {
+     uint64_t tr_asked = 0, tr_n = 0;   ///< STRATA_PF_ALLOC_TRACE: the cudaMalloc takes' sizes, and how far the free figure fell over them
+     int64_t tr_drop = 0;
+@@ -676,6 +684,7 @@ struct Alloc {
+     uint64_t failed_bytes = 0;          ///< the take that could not be allocated; the failure message names it
+     uint64_t granule = 0;               ///< count_only: each take rounds up to this (cudaMalloc's 2 MiB pages: owned buffers)
+     bool count_only = false;
++    bool pooled = false;
+     bool spill = false, spilled = false;
+     std::vector<void*>* owned = nullptr;
+     template <typename T> T* take(size_t n, bool& ok) {
+@@ -693,7 +702,8 @@ struct Alloc {
+         if (base != nullptr && !spill) { ok = false; failed_bytes = bytes; return nullptr; }
+         void* p = nullptr;
+         const int64_t tr0 = pf_alloc_trace() ? pf_free_mib() : 0;
+-        if (cudaMalloc(&p, bytes) != cudaSuccess) { ok = false; failed_bytes = bytes; return nullptr; }
++        // Reuse the synchronized startup allocator; cudaFree in release() handles both kinds.
++        if (core::allocate_weight(&p, bytes, pooled) != cudaSuccess) { ok = false; failed_bytes = bytes; return nullptr; }
+         if (pf_alloc_trace()) { tr_drop += tr0 - pf_free_mib(); tr_asked += bytes; ++tr_n; }
+         spilled = true;
+         owned->push_back(p);
+@@ -1324,6 +1334,7 @@ void take_stage(Alloc& o_borrowed, const core::SessionState& ss, const strata::k
+     if (stage_own() && o_borrowed.count_only) return;
+     Alloc own;
+     own.owned = o_borrowed.owned;
++    own.pooled = o_borrowed.pooled;
+     Alloc& o = stage_own() ? own : o_borrowed;
+     const size_t rows = (size_t) q0.n_pages * s.n_head_kv * s.page_size;
+     if (q0.kv_hybrid) {   // K8V4: the three runs of kKvHybrid; pools_of() then reads as the hybrid pools (mode 3)
+@@ -1816,6 +1827,18 @@ bool Prefill::init(const core::WeightTable& wt, const core::ModelGeometry& g, co
+     m.T = chunk > 0 ? chunk : 1;
+     return strata::metal_engine::window_ensure(g, ss, ss.qsa_states[ss.qsa_primary()].max_cells, err);
+ #endif
++    if (prefill_pool()) {
++#if defined(CUDART_VERSION) && CUDART_VERSION >= 11020 && !defined(STRATA_USE_HIP) && !defined(STRATA_HIP_GFX906) && !defined(STRATA_GPU_METAL)
++        int device = 0, supported = 0;
++        if (cudaGetDevice(&device) != cudaSuccess ||
++            cudaDeviceGetAttribute(&supported, cudaDevAttrMemoryPoolsSupported, device) != cudaSuccess || !supported) {
++            err = "STRATA_PREFILL_POOL=1 needs CUDA memory-pool support"; return false;
++        }
++        std::fprintf(stderr, "strata prefill: STRATA_PREFILL_POOL=1: owned prompt buffers use pooled CUDA allocations\n");
++#else
++        err = "STRATA_PREFILL_POOL=1 requires CUDA 11.2 or newer (not HIP/Metal)"; return false;
++#endif
++    }
+     m.wt = &wt; m.g = &g; m.ss = &ss; m.src = src; m.cache = cache; m.host_res = host_res;
+     m.T = chunk; m.cs = (cudaStream_t) stream; m.stats = &stats_;
+     if (g.n_embd != N || g.hc != HC || g.hc_lr != LR || g.n_expert < 1 || ss.k != K) {
+@@ -2000,6 +2023,7 @@ bool Prefill::init(const core::WeightTable& wt, const core::ModelGeometry& g, co
+     o.cap = borrow_bytes;
+     o.spill = m.borrow_spill;
+     o.owned = &m.owned;
++    o.pooled = prefill_pool();
+     {
+         uint16_t* gs = o.take<uint16_t>((size_t) GEMM_SCRATCH, ok);
+         void* ws = o.take<uint8_t>(GEMM_WS, ok);

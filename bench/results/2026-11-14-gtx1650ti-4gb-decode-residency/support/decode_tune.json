@@ -1,0 +1,68 @@
+[
+  {
+    "name": "decode_pcie50",
+    "env": {
+      "STRATA_HEAD_HOST": null,
+      "STRATA_DECODE_ONLY_PROMPT": "1",
+      "STRATA_WEIGHT_CACHE_MIB": "160"
+    },
+    "flags": {
+      "--short-read": "8192",
+      "--vram-reserve-mib": "128",
+      "--pcie-frac": "0.5"
+    }
+  },
+  {
+    "name": "decode_pcie60",
+    "env": {
+      "STRATA_HEAD_HOST": null,
+      "STRATA_DECODE_ONLY_PROMPT": "1",
+      "STRATA_WEIGHT_CACHE_MIB": "160"
+    },
+    "flags": {
+      "--short-read": "8192",
+      "--vram-reserve-mib": "128",
+      "--pcie-frac": "0.6"
+    }
+  },
+  {
+    "name": "decode_workers7",
+    "env": {
+      "STRATA_HEAD_HOST": null,
+      "STRATA_DECODE_ONLY_PROMPT": "1",
+      "STRATA_WEIGHT_CACHE_MIB": "160"
+    },
+    "flags": {
+      "--short-read": "8192",
+      "--vram-reserve-mib": "128",
+      "--pool-workers": "7"
+    }
+  },
+  {
+    "name": "decode_workers5",
+    "env": {
+      "STRATA_HEAD_HOST": null,
+      "STRATA_DECODE_ONLY_PROMPT": "1",
+      "STRATA_WEIGHT_CACHE_MIB": "160"
+    },
+    "flags": {
+      "--short-read": "8192",
+      "--vram-reserve-mib": "128",
+      "--pool-workers": "5"
+    }
+  },
+  {
+    "name": "decode_timed",
+    "env": {
+      "STRATA_HEAD_HOST": null,
+      "STRATA_DECODE_ONLY_PROMPT": "1",
+      "STRATA_WEIGHT_CACHE_MIB": "160",
+      "STRATA_DECODE_TIMING": "1",
+      "STRATA_VERIFY_PROFILE": "1"
+    },
+    "flags": {
+      "--short-read": "8192",
+      "--vram-reserve-mib": "128"
+    }
+  }
+]
